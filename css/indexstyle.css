@@ -1,0 +1,68 @@
+/*-------------------------Typing Effect ----------------------------------*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
+body
+{
+    font-family: 'Poppins', sans-serif;
+    background-color: black;
+    color: rgb(255, 240, 240);
+    margin: 0;
+    padding: 0;
+}
+.home
+{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+#typetext
+{
+    font-size: 28px;
+    position: absolute;
+    top: 35%;
+    color: azure;
+    letter-spacing: 0.2rem;
+    text-align: center;
+}
+.typed-text
+{
+    background: -webkit-linear-gradient(rgb(170, 22, 22), #ff0000);
+    background-clip: text;
+    -webkit-background-clip: text;
+    font-weight: 900;
+    -webkit-text-fill-color: transparent;
+    
+}
+.cursor
+{
+   
+    background-color: #fa0606;
+    width: 2px;
+    margin-left: 0.3em;
+    display: inline-block;
+    animation: blink 1s infinite;
+    
+}
+.cursor.typing
+{
+    animation: none;
+}
+
+@keyframes blink{
+    0%{background-color: #cccccc;}
+    50%{background-color: transparent;}
+    100%{background-color: #cccccc;}
+}
+ /*-- Navbar  --*/ 
+ #nav
+ {
+     
+     width: 100%;
+ }
+ #nav-cont
+ {
+     background: rgba(0, 0, 0, 0.5);
+ }
+/* */
