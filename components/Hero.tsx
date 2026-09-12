@@ -4,6 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { PointerEvent } from "react";
+import PromptChallengeTerminal from "./PromptChallengeTerminal";
 
 const title = "Anirudha Kurhade";
 
@@ -57,6 +58,7 @@ export default function Hero() {
           <motion.p className="hero-text" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.35 }}>
             I design LLM-assisted platforms, resilient data pipelines, and backend systems that help high-velocity teams move with confidence.
           </motion.p>
+          <PromptChallengeTerminal />
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.55 }}>
             <a className="glass-cta primary" href="#work">View Architecture (Projects) <ArrowUpRight size={15} /></a>
             <a className="glass-cta" href="/blog">Read Logs (Blog) <ArrowUpRight size={15} /></a>

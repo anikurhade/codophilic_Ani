@@ -25,12 +25,13 @@ app/
   icon.svg                Portfolio favicon
 components/
   Hero.tsx                Animated hero and interactive terminal visual
+  PromptChallengeTerminal.tsx Resume authorization sandbox
   Bento.tsx               About, education, credentials, and principles
   SkillsGrid.tsx          Categorized technical skills
   ExperienceTimeline.tsx  TransUnion enterprise initiatives
-  Projects.tsx            Filterable project list and detail modal
-  FloatingAIChat.tsx      Fixed local portfolio assistant
-  SocialFeed.tsx          Simulated insights feed
+  ProjectsBento.tsx       Architecture showcase cards
+  AIChatDrawer.tsx        Slide-over Agentic Twin interface
+  MediumInsights.tsx      Medium-style blog insight cards
   CreativeSpace.tsx       Photography, poetry, and running progress
   Navigation.tsx          Responsive site navigation
   SmoothScroll.tsx        Lenis client wrapper
