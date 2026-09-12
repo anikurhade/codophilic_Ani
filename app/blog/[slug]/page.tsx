@@ -1,0 +1,11 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+const articles: Record<string, { category: string; date: string; title: string; intro: string; paragraphs: string[] }> = {
+ "designing-useful-ai": { category: "Engineering / Tech", date: "June 24, 2024", title: "Designing AI that knows when to help", intro: "The most useful AI products are not the ones that say the most. They are the ones that create confidence at the right moment.", paragraphs: ["Agentic systems make it tempting to automate everything. A better starting point is to map the moments where people lose context, repeat a decision, or need a small amount of synthesis.", "In practice, that means designing clear handoffs, showing the source behind an answer, and making uncertainty visible. The interface should feel like a collaborator, not a black box.", "I keep returning to one simple question: does this make the next decision easier? If the answer is yes, the model is doing useful work."] },
+ "systems-and-curiosity": { category: "Life / Thoughts", date: "May 18, 2024", title: "Systems, curiosity, and the long way around", intro: "Legacy systems taught me that good engineering is often less about speed and more about leaving the next person a clearer path.", paragraphs: ["Modernization is not a demolition job. It is translation: understanding why something exists, preserving what matters, and creating room for a safer future.", "The same principle applies outside code. Curiosity slows us down just enough to notice the assumptions underneath a decision.", "That slower look is where better systems — and better ideas — usually begin."] },
+};
+export function generateStaticParams() { return Object.keys(articles).map((slug) => ({ slug })); }
+export default async function Article({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params; const article = articles[slug]; if (!article) notFound();
+  return <main className="article-page"><Link className="blog-back mono" href="/blog">← All notes</Link><p className="eyebrow">{article.category} · {article.date}</p><h1>{article.title}</h1><p className="article-intro">{article.intro}</p><article className="article-body">{article.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</article></main>;
+}
