@@ -14,5 +14,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" data-scroll-behavior="smooth" className={`${geist.variable} ${mono.variable}`}><body><SmoothScroll>{children}</SmoothScroll></body></html>;
+  return <html lang="en" data-scroll-behavior="smooth" className={`${geist.variable} ${mono.variable}`}><body className="overflow-x-hidden"><SmoothScroll>{children}</SmoothScroll></body></html>;
 }

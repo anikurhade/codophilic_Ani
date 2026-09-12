@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import ChatAgent from "./ChatAgent";
 
 const title = "Anirudha Kurhade";
 
@@ -22,7 +21,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="top" className="sunset-hero">
+    <section id="top" className="sunset-hero relative min-h-screen w-full overflow-hidden">
       <div className="hero-glow" aria-hidden="true" />
       <div className="sunset-hero-inner">
         <div className="hero-copy">
@@ -68,7 +67,6 @@ export default function Hero() {
         </div>
       </div>
       <a className="scroll-note mono" href="#about">SCROLL TO EXPLORE <ArrowDown size={14} /></a>
-      <ChatAgent />
     </section>
   );
 }
