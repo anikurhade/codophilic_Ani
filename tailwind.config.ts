@@ -14,8 +14,8 @@ const config: Config = {
         gold: "#fbbf24",
       },
       fontFamily: {
-        sans: ["var(--font-geist)", "Inter", "sans-serif"],
-        mono: ["var(--font-jetbrains)", "JetBrains Mono", "monospace"],
+        sans: ["var(--font-inter)", "Inter", "sans-serif"],
+        mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
       },
       letterSpacing: {
         tighter: "-0.06em",
