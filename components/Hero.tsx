@@ -1,13 +1,18 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { PointerEvent } from "react";
 
 const title = "Anirudha Kurhade";
 
 export default function Hero() {
   const [typed, setTyped] = useState("");
+  const pointerX = useSpring(useMotionValue(0), { stiffness: 120, damping: 18 });
+  const pointerY = useSpring(useMotionValue(0), { stiffness: 120, damping: 18 });
+  const rotateX = useTransform(pointerY, [-240, 240], [5, -5]);
+  const rotateY = useTransform(pointerX, [-240, 240], [-5, 5]);
   const phrase = "Backend Architect // AI Engineer";
 
   useEffect(() => {
@@ -20,8 +25,14 @@ export default function Hero() {
     return () => window.clearInterval(timer);
   }, []);
 
+  const handlePointerMove = (event: PointerEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    pointerX.set(event.clientX - (rect.left + rect.width / 2));
+    pointerY.set(event.clientY - (rect.top + rect.height / 2));
+  };
+
   return (
-    <section id="top" className="sunset-hero relative min-h-screen w-full overflow-hidden">
+    <section id="top" className="sunset-hero relative min-h-screen w-full overflow-hidden" onPointerMove={handlePointerMove} onPointerLeave={() => { pointerX.set(0); pointerY.set(0); }}>
       <div className="hero-glow" aria-hidden="true" />
       <div className="sunset-hero-inner">
         <div className="hero-copy">
@@ -53,7 +64,7 @@ export default function Hero() {
           </motion.div>
         </div>
         <div className="hero-terminal" aria-label="System architecture visual">
-          <div className="terminal-window">
+          <motion.div className="terminal-window" style={{ rotateX, rotateY }}>
             <div className="terminal-bar"><span /><span /><span /><small className="mono">anirudha@systems:~</small></div>
             <div className="terminal-content mono">
               <p><b>$</b> ./build-intelligence --scale</p>
@@ -62,7 +73,7 @@ export default function Hero() {
               <p className="terminal-success">✓ systems ready / latency: 40% lower</p>
               <p><b>$</b> <span className="terminal-caret">_</span></p>
             </div>
-          </div>
+          </motion.div>
           <p className="canvas-label mono">OBSIDIAN SYSTEM / 001</p>
         </div>
       </div>
