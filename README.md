@@ -6,7 +6,7 @@ The site uses an Obsidian and Sunset Amber visual system with motion-led interac
 
 ## Stack
 
-- Next.js 15 App Router with static export
+- Next.js 15 App Router with server routes
 - React 19 and TypeScript
 - Tailwind CSS v4 through PostCSS
 - Framer Motion for transitions, scroll reveals, and interaction
@@ -32,7 +32,10 @@ components/
   ProjectsBento.tsx       Architecture showcase cards
   AIChatDrawer.tsx        Slide-over Agentic Twin interface
   MediumInsights.tsx      Medium-style blog insight cards
-  CreativeSpace.tsx       Photography, poetry, and running progress
+  CreativeGallery.tsx     Photography, poetry, and running progress
+  SpotifyWidget.tsx       Live Spotify now-playing widget
+app/api/
+  spotify/route.ts        Server-side Spotify now-playing integration
   Navigation.tsx          Responsive site navigation
   SmoothScroll.tsx        Lenis client wrapper
 content/
@@ -61,11 +64,23 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```bash
 npm run dev       # Start the local development server
-npm run build     # Create and validate the static production export
+npm run build     # Create and validate the production build
 npm run typecheck # Run TypeScript without emitting files
 ```
 
-The production build writes the static export to `out/`.
+The application now requires a server-capable Next.js deployment for live API routes.
+
+### Spotify integration
+
+Create a Spotify developer application and add these server-only environment variables to `.env.local` or your deployment provider:
+
+```env
+SPOTIFY_CLIENT_ID=your-client-id
+SPOTIFY_CLIENT_SECRET=your-client-secret
+SPOTIFY_REFRESH_TOKEN=your-refresh-token
+```
+
+The refresh token is never exposed to the browser. If credentials are absent, invalid, or no track is playing, the widget falls back to “Last seen listening to Mohammed Rafi”.
 
 ## Content updates
 
@@ -76,13 +91,14 @@ The production build writes the static export to `out/`.
 
 ## Deployment
 
-The project is configured with `output: "export"` in `next.config.ts`, so it can be hosted on GitHub Pages or any static hosting provider.
+The project uses server-side Next.js routes for live Spotify data, so deploy it to Vercel, Railway, Render, or another Node-compatible host. GitHub Pages can still host a static-only version, but it cannot execute `app/api/spotify/route.ts`.
 
 ```bash
 npm run build
+npm run start
 ```
 
-Deploy the generated `out/` directory. For GitHub Pages, configure the repository’s deployment workflow or Pages source to publish that directory.
+Configure the three Spotify environment variables in the deployment provider before starting the application.
 
 ## Design tokens
 

@@ -28,8 +28,8 @@ const photos: GalleryPhoto[] = [
     frameClass: "aspect-[3/4]",
   },
   {
-    src: "/img/gallery-sunset.jpeg",
-    alt: "Sunset light over a distant mountain horizon",
+    src: "/img/gallery-mountain-view.jpeg",
+    alt: "Hiker standing on a mountain ridge above a hazy valley",
     frameClass: "aspect-[3/2]",
   },
   {
