@@ -78,9 +78,18 @@ Create a Spotify developer application and add these server-only environment var
 SPOTIFY_CLIENT_ID=your-client-id
 SPOTIFY_CLIENT_SECRET=your-client-secret
 SPOTIFY_REFRESH_TOKEN=your-refresh-token
+SPOTIFY_REDIRECT_URI=http://127.0.0.1:3000/api/spotify/callback
 ```
 
 The refresh token is never exposed to the browser. If credentials are absent, invalid, or no track is playing, the widget falls back to “Last seen listening to Mohammed Rafi”.
+
+For local authorization, register this exact URI in the Spotify Developer Dashboard:
+
+```text
+http://127.0.0.1:3000/api/spotify/callback
+```
+
+Then run the app locally and open `http://127.0.0.1:3000/api/spotify/login`. The OAuth setup routes are intentionally disabled in production, and the callback validates a short-lived CSRF state cookie before exchanging the authorization code. Copy the returned refresh token into the server-only `SPOTIFY_REFRESH_TOKEN` environment variable, then add it to Vercel. Never deploy the setup routes as a public token-generation mechanism.
 
 ## Content updates
 
