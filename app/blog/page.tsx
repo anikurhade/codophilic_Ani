@@ -4,5 +4,5 @@ const posts = [
   { slug: "systems-and-curiosity", title: "Systems, curiosity, and the long way around", category: "Life / Thoughts", date: "May 18, 2024", excerpt: "What legacy systems taught me about patience, craft, and asking better questions." },
 ];
 export default function BlogIndex() {
-  return <main className="blog-page"><Link className="blog-back mono" href="/">← Back home</Link><p className="eyebrow">TECH &amp; LIFE / NOTES</p><h1>Ideas in<br /><em>progress.</em></h1><div className="post-list">{posts.map((post) => <Link className="post-card" href={`/blog/${post.slug}`} key={post.slug}><span className="mono">{post.category} · {post.date}</span><h2>{post.title}</h2><p>{post.excerpt}</p><span className="accent">Read article ↗</span></Link>)}</div></main>;
+  return <main className="blog-page"><Link className="blog-back mono" href="/">← Back home</Link><p className="eyebrow">TECH &amp; LIFE / NOTES</p><h1>Ideas in<br /><em>progress.</em></h1><div className="post-list prose prose-zinc dark:prose-invert max-w-none">{posts.map((post) => <Link className="post-card" href={`/blog/${post.slug}`} key={post.slug}><span className="mono">{post.category} · {post.date}</span><h2>{post.title}</h2><p>{post.excerpt}</p><span className="accent">Read article ↗</span></Link>)}</div></main>;
 }

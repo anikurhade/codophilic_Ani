@@ -4,17 +4,19 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 type SpotifyState = {
-  available: boolean;
-  isPlaying?: boolean;
-  track?: string;
-  artist?: string;
-  albumArt?: string | null;
+  isPlaying: boolean;
+  title: string;
+  artist: string;
+  albumImageUrl: string | null;
+  songUrl: string | null;
 };
 
 const fallbackState: SpotifyState = {
-  available: false,
-  track: "Last seen listening to Mohammed Rafi",
+  isPlaying: false,
+  title: "Last seen listening to Mohammed Rafi",
   artist: "Offline mode",
+  albumImageUrl: null,
+  songUrl: null,
 };
 
 export default function SpotifyWidget() {
@@ -26,10 +28,13 @@ export default function SpotifyWidget() {
     const loadNowPlaying = async () => {
       try {
         const response = await fetch("/api/spotify", { cache: "no-store" });
-        if (!response.ok) return;
+        if (!response.ok) {
+          if (!cancelled) setState(fallbackState);
+          return;
+        }
         const nextState = (await response.json()) as SpotifyState;
         if (!cancelled) {
-          setState(nextState.available ? nextState : fallbackState);
+          setState(nextState);
         }
       } catch {
         if (!cancelled) setState(fallbackState);
@@ -46,8 +51,8 @@ export default function SpotifyWidget() {
 
   return (
     <aside className="spotify-widget" aria-label="Spotify now playing">
-      {state.albumArt ? (
-        <Image className="spotify-art" src={state.albumArt} alt="" width={44} height={44} unoptimized />
+      {state.albumImageUrl ? (
+        <Image className="spotify-art" src={state.albumImageUrl} alt="" width={44} height={44} unoptimized />
       ) : (
         <div className="spotify-art spotify-art-fallback" aria-hidden="true">
           ♪
@@ -55,9 +60,9 @@ export default function SpotifyWidget() {
       )}
       <div className="spotify-copy">
         <span className="mono spotify-label">
-          <i className={state.isPlaying ? "spotify-live" : ""} /> {state.available && state.isPlaying ? "NOW PLAYING" : "LISTENING LOG"}
+          <i className={state.isPlaying ? "spotify-live" : ""} /> {state.isPlaying ? "NOW PLAYING" : "LISTENING LOG"}
         </span>
-        <strong>{state.track}</strong>
+        {state.songUrl ? <a href={state.songUrl} target="_blank" rel="noopener noreferrer"><strong>{state.title}</strong></a> : <strong>{state.title}</strong>}
         <small>{state.artist}</small>
       </div>
       <span className={`spotify-equalizer${state.isPlaying ? " is-playing" : ""}`} aria-hidden="true">

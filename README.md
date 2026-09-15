@@ -96,7 +96,7 @@ Then run the app locally and open `http://127.0.0.1:3000/api/spotify/login`. The
 - Homepage copy and section composition live in `app/page.tsx` and the component files under `components/`.
 - Blog index metadata is in `app/blog/page.tsx`.
 - Article route content is currently represented by structured article data in `app/blog/[slug]/page.tsx`; the `.mdx` files in `content/` are retained as the content source architecture for future MDX rendering.
-- Images must be placed under `public/img/` and referenced with a root-relative path such as `/img/picture1.JPG`.
+- Images must be placed under `public/img/` and referenced with a root-relative path such as `/img/gallery-mountain-trail.jpeg`.
 
 ## Deployment
 

@@ -66,7 +66,7 @@ export default function Hero() {
           </motion.div>
         </div>
         <div className="hero-terminal" aria-label="System architecture visual">
-          <motion.div className="terminal-window" style={{ rotateX, rotateY }}>
+          <motion.div className="terminal-window bg-zinc-100 text-zinc-800 shadow-[0_0_18px_rgba(249,115,22,0.12)] dark:bg-[#0a0a0a] dark:text-zinc-300 dark:shadow-[0_0_18px_rgba(249,115,22,0.28)]" style={{ rotateX, rotateY }}>
             <div className="terminal-bar"><span /><span /><span /><small className="mono">anirudha@systems:~</small></div>
             <div className="terminal-content mono">
               <p><b>$</b> ./build-intelligence --scale</p>

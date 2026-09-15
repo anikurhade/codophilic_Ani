@@ -3,6 +3,8 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import SpotifyWidget from "@/components/SpotifyWidget";
+import ThemeProvider from "@/components/ThemeProvider";
+import SideScrubber from "@/components/SideScrubber";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -15,5 +17,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${mono.variable}`}><body className="overflow-x-hidden"><SmoothScroll>{children}</SmoothScroll><SpotifyWidget /></body></html>;
+  return <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={`${inter.variable} ${mono.variable}`}><body className="overflow-x-hidden"><ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}><SmoothScroll>{children}</SmoothScroll><SpotifyWidget /><SideScrubber /></ThemeProvider></body></html>;
 }

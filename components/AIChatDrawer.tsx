@@ -19,7 +19,9 @@ export default function AIChatDrawer() {
   const [thinking, setThinking] = useState(false);
   const [messages, setMessages] = useState<Message[]>([{ role: "agent", text: "Agentic Twin online. Ask me about Anirudha's work." }]);
   const messagesRef = useRef<HTMLDivElement>(null);
+  const responseTimer = useRef<number | null>(null);
   useEffect(() => { messagesRef.current?.scrollTo({ top: messagesRef.current.scrollHeight, behavior: "smooth" }); }, [messages, thinking]);
+  useEffect(() => () => { if (responseTimer.current !== null) window.clearTimeout(responseTimer.current); }, []);
 
   const ask = (value: string) => {
     const question = value.trim();
@@ -27,7 +29,7 @@ export default function AIChatDrawer() {
     setMessages((current) => [...current, { role: "user", text: question }]);
     setInput("");
     setThinking(true);
-    window.setTimeout(() => {
+    responseTimer.current = window.setTimeout(() => {
       const response = responses[question] ?? "I can explain PRISM, the Atlassian workflow, Anirudha's stack, or his background. Try one of the quick prompts.";
       setMessages((current) => [...current, { role: "agent", text: response }]);
       setThinking(false);
@@ -35,5 +37,5 @@ export default function AIChatDrawer() {
   };
   const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); ask(input); };
 
-  return <><button className="drawer-trigger" aria-label="Open Agentic Twin chat" onClick={() => setOpen(true)}><Bot size={19} /><span>Agentic Twin</span></button><AnimatePresence>{open && <motion.div className="drawer-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)}><motion.aside className="ai-drawer" role="dialog" aria-label="Agentic Twin chat" initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }} transition={{ type: "spring", damping: 28, stiffness: 260 }} onClick={(event) => event.stopPropagation()}><header className="ai-drawer-header"><span><Bot size={15} /> Agentic Twin // Online</span><button aria-label="Close chat" onClick={() => setOpen(false)}><X size={18} /></button></header><div className="ai-drawer-messages scrollbar-hide" ref={messagesRef} aria-live="polite">{messages.map((message, index) => <p className={`drawer-message ${message.role}`} key={`${message.role}-${index}`}>{message.text}</p>)}{thinking && <p className="drawer-message agent thinking">Thinking…</p>}</div><div className="drawer-chips scrollbar-hide">{chips.map((chip) => <button key={chip} onClick={() => ask(chip)}>{chip}</button>)}</div><form className="drawer-form" onSubmit={submit}><input value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask the twin..." aria-label="Message Agentic Twin" /><button aria-label="Send message" disabled={thinking}><Send size={15} /></button></form></motion.aside></motion.div>}</AnimatePresence></>;
+  return <><button className="drawer-trigger" aria-label="Open Agentic Twin chat" onClick={() => setOpen(true)}><Bot size={19} /><span>Agentic Twin</span></button><AnimatePresence>{open && <motion.div className="drawer-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)}><motion.aside className="ai-drawer bg-zinc-50 dark:bg-[#09090b]" role="dialog" aria-modal="true" aria-label="Agentic Twin chat" initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }} transition={{ type: "spring", damping: 28, stiffness: 260 }} onClick={(event) => event.stopPropagation()}><header className="ai-drawer-header"><span><Bot size={15} /> Agentic Twin // Online</span><button aria-label="Close chat" onClick={() => setOpen(false)}><X size={18} /></button></header><div className="ai-drawer-messages scrollbar-hide" ref={messagesRef} aria-live="polite">{messages.map((message, index) => <p className={`drawer-message ${message.role}`} key={`${message.role}-${index}`}>{message.text}</p>)}{thinking && <p className="drawer-message agent thinking">Thinking…</p>}</div><div className="drawer-chips scrollbar-hide">{chips.map((chip) => <button key={chip} onClick={() => ask(chip)}>{chip}</button>)}</div><form className="drawer-form" onSubmit={submit}><input value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask the twin..." aria-label="Message Agentic Twin" /><button aria-label="Send message" disabled={thinking}><Send size={15} /></button></form></motion.aside></motion.div>}</AnimatePresence></>;
 }

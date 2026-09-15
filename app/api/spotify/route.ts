@@ -1,22 +1,19 @@
 import { NextResponse } from "next/server";
 
 const spotifyTokenUrl = "https://accounts.spotify.com/api/token";
-const spotifyCurrentlyPlayingUrl = "https://api.spotify.com/v1/me/player/currently-playing";
+const currentlyPlayingUrl = "https://api.spotify.com/v1/me/player/currently-playing";
+const recentlyPlayedUrl = "https://api.spotify.com/v1/me/player/recently-played?limit=1";
+const noStore = { "Cache-Control": "no-store" };
 
-type SpotifyTokenResponse = {
-  access_token: string;
+type SpotifyTokenResponse = { access_token: string };
+type SpotifyTrack = {
+  name?: string;
+  artists?: Array<{ name?: string }>;
+  album?: { images?: Array<{ url?: string }> };
+  external_urls?: { spotify?: string };
 };
-
-type SpotifyCurrentlyPlaying = {
-  is_playing?: boolean;
-  item?: {
-    name?: string;
-    artists?: Array<{ name?: string }>;
-    album?: {
-      images?: Array<{ url?: string }>;
-    };
-  };
-};
+type CurrentlyPlayingResponse = { is_playing?: boolean; item?: SpotifyTrack };
+type RecentlyPlayedResponse = { items?: Array<{ track?: SpotifyTrack }> };
 
 const requestLog = new Map<string, number[]>();
 const RATE_WINDOW_MS = 60_000;
@@ -36,62 +33,61 @@ function isRateLimited(request: Request) {
   return false;
 }
 
+function offlineResponse(status = 200) {
+  return NextResponse.json({
+    isPlaying: false,
+    title: "Last seen listening to Mohammed Rafi",
+    artist: "Offline mode",
+    albumImageUrl: null,
+    songUrl: null,
+  }, { status, headers: noStore });
+}
+
 export async function GET(request: Request) {
   if (isRateLimited(request)) {
-    return NextResponse.json({ available: false }, { status: 429, headers: { "Cache-Control": "no-store", "Retry-After": "60" } });
+    return NextResponse.json({ error: "Too many requests." }, { status: 429, headers: { ...noStore, "Retry-After": "60" } });
   }
 
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
   const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
+  if (!clientId || !clientSecret || !refreshToken) return offlineResponse(503);
 
-  if (!clientId || !clientSecret || !refreshToken) {
-    return NextResponse.json({ available: false }, { status: 503, headers: { "Cache-Control": "no-store" } });
-  }
-
-  const authorization = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
   const tokenResponse = await fetch(spotifyTokenUrl, {
     method: "POST",
     headers: {
-      Authorization: `Basic ${authorization}`,
+      Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: new URLSearchParams({
-      grant_type: "refresh_token",
-      refresh_token: refreshToken,
-    }),
+    body: new URLSearchParams({ grant_type: "refresh_token", refresh_token: refreshToken }),
     cache: "no-store",
   });
+  if (!tokenResponse.ok) return offlineResponse(502);
 
-  if (!tokenResponse.ok) {
-    return NextResponse.json({ available: false }, { status: 502, headers: { "Cache-Control": "no-store" } });
+  const { access_token: accessToken } = (await tokenResponse.json()) as SpotifyTokenResponse;
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const currentResponse = await fetch(currentlyPlayingUrl, { headers, cache: "no-store" });
+  let track: SpotifyTrack | undefined;
+  let isPlaying = false;
+
+  if (currentResponse.ok && currentResponse.status !== 204) {
+    const current = (await currentResponse.json()) as CurrentlyPlayingResponse;
+    track = current.item;
+    isPlaying = current.is_playing === true;
   }
 
-  const token = (await tokenResponse.json()) as SpotifyTokenResponse;
-  const nowPlayingResponse = await fetch(spotifyCurrentlyPlayingUrl, {
-    headers: { Authorization: `Bearer ${token.access_token}` },
-    cache: "no-store",
-  });
-
-  if (nowPlayingResponse.status === 204 || nowPlayingResponse.status === 202) {
-    return NextResponse.json({ available: false }, { headers: { "Cache-Control": "no-store" } });
+  if (!track?.name || !isPlaying) {
+    const recentResponse = await fetch(recentlyPlayedUrl, { headers, cache: "no-store" });
+    if (!recentResponse.ok) return offlineResponse(502);
+    track = ((await recentResponse.json()) as RecentlyPlayedResponse).items?.[0]?.track;
   }
 
-  if (!nowPlayingResponse.ok) {
-    return NextResponse.json({ available: false }, { status: 502, headers: { "Cache-Control": "no-store" } });
-  }
-
-  const track = (await nowPlayingResponse.json()) as SpotifyCurrentlyPlaying;
-  const item = track.item;
-  if (!item?.name) {
-    return NextResponse.json({ available: false }, { headers: { "Cache-Control": "no-store" } });
-  }
-
+  if (!track?.name) return offlineResponse();
   return NextResponse.json({
-    available: true,
-    isPlaying: track.is_playing ?? false,
-    track: item.name,
-    artist: item.artists?.map((artist) => artist.name).filter(Boolean).join(", ") || "Unknown artist",
-    albumArt: item.album?.images?.[0]?.url || null,
-  }, { headers: { "Cache-Control": "no-store" } });
+    isPlaying,
+    title: track.name,
+    artist: track.artists?.map((artist) => artist.name).filter(Boolean).join(", ") || "Unknown artist",
+    albumImageUrl: track.album?.images?.[0]?.url || null,
+    songUrl: track.external_urls?.spotify || null,
+  }, { headers: noStore });
 }

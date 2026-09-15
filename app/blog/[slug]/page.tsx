@@ -7,5 +7,5 @@ const articles: Record<string, { category: string; date: string; title: string; 
 export function generateStaticParams() { return Object.keys(articles).map((slug) => ({ slug })); }
 export default async function Article({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params; const article = articles[slug]; if (!article) notFound();
-  return <main className="article-page"><Link className="blog-back mono" href="/blog">← All notes</Link><p className="eyebrow">{article.category} · {article.date}</p><h1>{article.title}</h1><p className="article-intro">{article.intro}</p><article className="article-body">{article.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</article></main>;
+  return <main className="article-page"><Link className="blog-back mono" href="/blog">← All notes</Link><p className="eyebrow">{article.category} · {article.date}</p><h1>{article.title}</h1><p className="article-intro">{article.intro}</p><article className="article-body prose prose-zinc dark:prose-invert max-w-none">{article.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</article></main>;
 }
