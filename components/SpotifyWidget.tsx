@@ -9,6 +9,7 @@ type SpotifyState = {
   artist: string;
   albumImageUrl: string | null;
   songUrl: string | null;
+  source: "current" | "recent" | "offline";
 };
 
 const fallbackState: SpotifyState = {
@@ -17,7 +18,9 @@ const fallbackState: SpotifyState = {
   artist: "Offline mode",
   albumImageUrl: null,
   songUrl: null,
+  source: "offline",
 };
+const storageKey = "anirudha:last-spotify-track";
 
 export default function SpotifyWidget() {
   const [state, setState] = useState<SpotifyState>(fallbackState);
@@ -29,18 +32,26 @@ export default function SpotifyWidget() {
       try {
         const response = await fetch("/api/spotify", { cache: "no-store" });
         if (!response.ok) {
-          if (!cancelled) setState(fallbackState);
+          if (!cancelled) {
+            setState((currentState) => currentState.source === "offline" ? readCachedState() : currentState);
+          }
           return;
         }
         const nextState = (await response.json()) as SpotifyState;
         if (!cancelled) {
           setState(nextState);
+          if (nextState.source !== "offline" && nextState.title) {
+            window.localStorage.setItem(storageKey, JSON.stringify(nextState));
+          }
         }
       } catch {
-        if (!cancelled) setState(fallbackState);
+        if (!cancelled) {
+          setState((currentState) => currentState.source === "offline" ? readCachedState() : currentState);
+        }
       }
     };
 
+    setState(readCachedState());
     void loadNowPlaying();
     const interval = window.setInterval(loadNowPlaying, 30_000);
     return () => {
@@ -60,7 +71,7 @@ export default function SpotifyWidget() {
       )}
       <div className="spotify-copy">
         <span className="mono spotify-label">
-          <i className={state.isPlaying ? "spotify-live" : ""} /> {state.isPlaying ? "NOW PLAYING" : "LISTENING LOG"}
+          <i className={state.isPlaying ? "spotify-live" : ""} /> {state.isPlaying ? "NOW PLAYING" : state.source === "offline" ? "LAST PLAYED" : "LISTENING LOG"}
         </span>
         {state.songUrl ? <a href={state.songUrl} target="_blank" rel="noopener noreferrer"><strong>{state.title}</strong></a> : <strong>{state.title}</strong>}
         <small>{state.artist}</small>
@@ -73,4 +84,24 @@ export default function SpotifyWidget() {
       </span>
     </aside>
   );
+}
+
+function readCachedState(): SpotifyState {
+  if (typeof window === "undefined") return fallbackState;
+
+  try {
+    const cached = JSON.parse(window.localStorage.getItem(storageKey) || "null") as Partial<SpotifyState> | null;
+    if (cached?.title && cached.artist) {
+      return {
+        ...fallbackState,
+        ...cached,
+        isPlaying: false,
+        source: "offline",
+      };
+    }
+  } catch {
+    window.localStorage.removeItem(storageKey);
+  }
+
+  return fallbackState;
 }

@@ -14,6 +14,7 @@ type SpotifyTrack = {
 };
 type CurrentlyPlayingResponse = { is_playing?: boolean; item?: SpotifyTrack };
 type RecentlyPlayedResponse = { items?: Array<{ track?: SpotifyTrack }> };
+type PlaybackSource = "current" | "recent" | "offline";
 
 const requestLog = new Map<string, number[]>();
 const RATE_WINDOW_MS = 60_000;
@@ -40,6 +41,7 @@ function offlineResponse(status = 200) {
     artist: "Offline mode",
     albumImageUrl: null,
     songUrl: null,
+    source: "offline" satisfies PlaybackSource,
   }, { status, headers: noStore });
 }
 
@@ -89,5 +91,6 @@ export async function GET(request: Request) {
     artist: track.artists?.map((artist) => artist.name).filter(Boolean).join(", ") || "Unknown artist",
     albumImageUrl: track.album?.images?.[0]?.url || null,
     songUrl: track.external_urls?.spotify || null,
+    source: isPlaying ? "current" : "recent",
   }, { headers: noStore });
 }
