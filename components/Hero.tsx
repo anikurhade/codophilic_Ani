@@ -65,10 +65,10 @@ export default function Hero() {
             <a className="glass-cta" href="#contact">Connect <ArrowUpRight size={15} /></a>
           </motion.div>
         </div>
-        <div className="hero-terminal" aria-label="System architecture visual">
-          <motion.div className="terminal-window bg-zinc-100 text-zinc-800 shadow-[0_0_18px_rgba(249,115,22,0.12)] dark:bg-[#0a0a0a] dark:text-zinc-300 dark:shadow-[0_0_18px_rgba(249,115,22,0.28)]" style={{ rotateX, rotateY }}>
+        <div className="hero-terminal bg-transparent" aria-label="System architecture visual">
+          <motion.div className="terminal-window bg-zinc-50 text-zinc-800 border-zinc-200 shadow-[0_0_18px_rgba(249,115,22,0.12)] dark:bg-[#18181b] dark:text-zinc-300 dark:border-zinc-800 dark:shadow-[0_0_18px_rgba(249,115,22,0.28)]" style={{ rotateX, rotateY }}>
             <div className="terminal-bar"><span /><span /><span /><small className="mono">anirudha@systems:~</small></div>
-            <div className="terminal-content mono">
+            <div className="terminal-content mono text-zinc-800 dark:text-zinc-300">
               <p><b>$</b> ./build-intelligence --scale</p>
               <p className="terminal-muted">loading architecture...</p>
               <div className="terminal-orb"><div className="orb-core" /><div className="orb-ring ring-a" /><div className="orb-ring ring-b" /></div>

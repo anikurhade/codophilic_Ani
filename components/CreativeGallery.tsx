@@ -8,11 +8,6 @@ type GalleryPhoto = {
 
 const photos: GalleryPhoto[] = [
   {
-    src: "/img/gallery-sunset-silhouette.jpeg",
-    alt: "Hiker looking across layered mountains beneath a warm sunset",
-    frameClass: "aspect-[4/5]",
-  },
-  {
     src: "/img/gallery-lake.jpeg",
     alt: "Quiet lake bordered by trees and old stone architecture",
     frameClass: "aspect-[4/3]",
