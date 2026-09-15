@@ -8,28 +8,33 @@ type GalleryPhoto = {
 
 const photos: GalleryPhoto[] = [
   {
-    src: "/img/gallery-lake.jpeg",
-    alt: "Quiet lake bordered by trees and old stone architecture",
+    src: "/img/creative-orange-scarf.jpeg",
+    alt: "Anirudha standing outdoors in a white kurta with an orange scarf",
     frameClass: "aspect-[4/3]",
   },
   {
-    src: "/img/gallery-mountain-trail.jpeg",
-    alt: "Mountain trail opening onto a hazy blue valley",
-    frameClass: "aspect-[4/5]",
-  },
-  {
-    src: "/img/gallery-meadow.jpeg",
-    alt: "Green meadow beneath misty mountain slopes",
+    src: "/img/creative-misty-meadow.jpeg",
+    alt: "Anirudha standing in a vivid green meadow beneath misty hills",
     frameClass: "aspect-[3/4]",
   },
   {
-    src: "/img/gallery-mountain-view.jpeg",
-    alt: "Hiker standing on a mountain ridge above a hazy valley",
-    frameClass: "aspect-[3/2]",
+    src: "/img/creative-transunion-stage.jpeg",
+    alt: "Anirudha on stage at a TransUnion transformation experience",
+    frameClass: "aspect-[4/5]",
   },
   {
-    src: "/img/gallery-rural-road.jpeg",
-    alt: "Rural road crossing a green tree-lined landscape",
+    src: "/img/creative-forest-ride.jpeg",
+    alt: "Motorcyclist crossing a forested bridge",
+    frameClass: "aspect-[3/4]",
+  },
+  {
+    src: "/img/creative-sunset-view.jpeg",
+    alt: "Traveler looking across layered hills beneath a warm sunset",
+    frameClass: "aspect-[3/4]",
+  },
+  {
+    src: "/img/creative-award.jpeg",
+    alt: "Anirudha receiving a performance award at work",
     frameClass: "aspect-[4/5]",
   },
 ];
@@ -37,14 +42,14 @@ const photos: GalleryPhoto[] = [
 function PhotoFrame({ photo }: { photo: GalleryPhoto }) {
   return (
     <figure
-      className={`group relative mb-4 break-inside-avoid overflow-hidden rounded-lg bg-zinc-900 shadow-none transition-shadow duration-500 ease-out hover:shadow-[0_0_26px_rgba(249,115,22,0.18)] ${photo.frameClass}`}
+      className={`relative mb-4 break-inside-avoid overflow-hidden rounded-lg bg-zinc-900 ${photo.frameClass}`}
     >
       <Image
         src={photo.src}
         alt={photo.alt}
         fill
         sizes="(max-width: 767px) 50vw, 33vw"
-        className="object-cover grayscale-[50%] opacity-80 transition-all duration-500 ease-out group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-100"
+        className="object-cover"
       />
     </figure>
   );
