@@ -3,7 +3,12 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BlogComments from "@/components/BlogComments";
+import BlogCodeBlock from "@/components/BlogCodeBlock";
 import { blogArticles, getArticleReadTime } from "@/content/blogs";
+
+function createHeadingId(heading: string) {
+  return heading.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu, "").replace(/\s+/g, "-");
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -35,6 +40,14 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
   if (!article) notFound();
 
   const moreArticles = blogArticles.filter((item) => item.slug !== article.slug).slice(0, 3);
+  const headingIds = new Map<string, number>();
+  const articleSections = article.sections.map((section) => {
+    if (!("heading" in section)) return { section, headingId: undefined };
+    const baseId = createHeadingId(section.heading);
+    const occurrence = (headingIds.get(baseId) || 0) + 1;
+    headingIds.set(baseId, occurrence);
+    return { section, headingId: occurrence === 1 ? baseId : `${baseId}-${occurrence}` };
+  });
 
   return (
     <main className="article-page">
@@ -42,16 +55,30 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
       <p className="eyebrow">{article.category} · {article.date} · {getArticleReadTime(article)} read</p>
       <h1>{article.title}</h1>
       <p className="article-intro">{article.intro}</p>
-      <article className="article-body prose prose-zinc dark:prose-invert max-w-3xl mx-auto px-6 sm:px-8">
-        {article.sections.map((section, index) => (
+      <div className="article-content-layout">
+        <aside className="article-toc">
+          <nav aria-label="On this page">
+            <p className="mono">IN THIS ARTICLE</p>
+            <ol>
+              {articleSections.map(({ section, headingId }) =>
+                "heading" in section && headingId
+                  ? <li key={headingId}><a href={`#${headingId}`}>{section.heading}</a></li>
+                  : null
+              )}
+            </ol>
+          </nav>
+        </aside>
+        <article className="article-body prose prose-zinc dark:prose-invert max-w-3xl mx-auto px-6 sm:px-8">
+        {articleSections.map(({ section, headingId }, index) => (
           <section key={`${article.slug}-${index}`}>
-            {"heading" in section && <h2>{section.heading}</h2>}
+            {"heading" in section && <h2 id={headingId}>{section.heading}</h2>}
             {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             {"code" in section && section.code && (
-              <figure className="article-code w-full overflow-x-auto my-8">
-                <figcaption>{section.code.title} · {section.code.language}</figcaption>
-                <pre><code>{section.code.source}</code></pre>
-              </figure>
+              <BlogCodeBlock
+                title={section.code.title}
+                language={section.code.language}
+                source={section.code.source}
+              />
             )}
             {"table" in section && section.table && (
               <div className="article-table-wrap w-full overflow-x-auto my-8">
@@ -75,7 +102,8 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
             )}
           </section>
         ))}
-      </article>
+        </article>
+      </div>
       <section className="more-articles" aria-labelledby="more-articles-title">
         <div className="more-articles-heading">
           <div>

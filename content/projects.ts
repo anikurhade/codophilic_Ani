@@ -15,6 +15,7 @@ export const projects = [
     highlights: [],
     href: "/blog/inside-attentionlens",
     linkLabel: "Architecture notes",
+    liveUrl: "https://attentionlens.streamlit.app/",
   },
   {
     slug: "corporate-ai-music-game",
@@ -32,6 +33,7 @@ export const projects = [
     highlights: [],
     href: "/blog/designing-useful-ai",
     linkLabel: "AI design notes",
+    liveUrl: "https://corporatemusicgame.vercel.app/",
   },
   {
     slug: "smart-carpool",
