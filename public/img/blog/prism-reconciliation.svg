@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">PRISM reconciliation and triage flow</title>
+  <desc id="desc">Legacy C and modern Java outputs are normalized and compared field by field. Differences become structured logs. PRISM drafts a bounded PySpark query for human review.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" x2="1">
+      <stop offset="0" stop-color="#1c1917"/>
+      <stop offset="1" stop-color="#111113"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#fb923c"/>
+    </marker>
+    <style>
+      text{font-family:Arial,sans-serif;fill:#f4f4f5}
+      .label{font-size:17px;font-weight:700}
+      .small{font-size:13px;fill:#d6d3d1}
+      .kicker{font-size:11px;letter-spacing:2px;fill:#fdba74}
+      .box{fill:url(#panel);stroke:#fb923c;stroke-width:2}
+      .flow{fill:none;stroke:#fb923c;stroke-width:3;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="960" height="480" rx="18" fill="#09090b"/>
+  <text x="42" y="48" class="kicker">SCHEMA-AWARE MIGRATION VALIDATION</text>
+  <rect class="box" x="38" y="100" width="190" height="108" rx="12"/>
+  <text class="label" x="133" y="143" text-anchor="middle">Legacy C</text>
+  <text class="small" x="133" y="172" text-anchor="middle">reference output</text>
+  <rect class="box" x="38" y="266" width="190" height="108" rx="12"/>
+  <text class="label" x="133" y="309" text-anchor="middle">Modern Java</text>
+  <text class="small" x="133" y="338" text-anchor="middle">migration output</text>
+  <path class="flow" d="M228 154h52v83h28"/>
+  <path class="flow" d="M228 320h52v-83h28"/>
+  <rect class="box" x="308" y="171" width="208" height="132" rx="12"/>
+  <text class="label" x="412" y="212" text-anchor="middle">Normalize + compare</text>
+  <text class="small" x="412" y="241" text-anchor="middle">keys · schema · fields</text>
+  <text class="small" x="412" y="265" text-anchor="middle">counts · nulls · rules</text>
+  <path class="flow" d="M516 237h44"/>
+  <rect class="box" x="560" y="171" width="166" height="132" rx="12"/>
+  <text class="label" x="643" y="212" text-anchor="middle">Diff evidence</text>
+  <text class="small" x="643" y="241" text-anchor="middle">run + partition IDs</text>
+  <text class="small" x="643" y="265" text-anchor="middle">field-level mismatch</text>
+  <path class="flow" d="M726 237h44"/>
+  <rect class="box" x="770" y="116" width="154" height="106" rx="12"/>
+  <text class="label" x="847" y="155" text-anchor="middle">PRISM</text>
+  <text class="small" x="847" y="182" text-anchor="middle">drafts focused</text>
+  <text class="small" x="847" y="202" text-anchor="middle">PySpark triage</text>
+  <path class="flow" d="M847 222v47"/>
+  <rect class="box" x="770" y="269" width="154" height="105" rx="12"/>
+  <text class="label" x="847" y="307" text-anchor="middle">Human review</text>
+  <text class="small" x="847" y="334" text-anchor="middle">verify evidence</text>
+  <text class="small" x="847" y="354" text-anchor="middle">decide + record</text>
+</svg>

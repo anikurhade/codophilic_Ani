@@ -118,12 +118,12 @@ export const blogArticles = [
   },
   {
     slug: "multi-hop-carpool-routing",
-    title:
-      "How Flight-Booking Engines Compute Multi-Stop Layovers—and How I Engineered Multi-Hop Auto-Routing in My Carpool Platform",
-    category: "Engineering / Mobility",
+    title: "Bringing Airline Layover Math to Real-Time Carpooling",
+    category: "Java / Graph Algorithms",
+    readingMinutes: 8,
     date: "October 2026",
     excerpt:
-      "A flight itinerary is a constrained path through time. The same idea can connect several carpools into one understandable journey.",
+      "How I engineered a time-expanded graph router in Java and Spring Boot to stitch fragmented rides into seamless multi-hop itineraries.",
     intro:
       "Flight search looks simple from the outside: choose two cities, choose a date, and compare itineraries. Underneath, it is a constrained path-finding problem—and that makes it a useful model for multi-hop carpooling.",
     sections: [
@@ -179,15 +179,68 @@ export const blogArticles = [
           "Privacy-first vehicle details reduce unnecessary exposure before a match is meaningful. The platform should reveal only what a verified rider needs at the right stage, while retaining the minimum operational information required to handle safety reports. Privacy is a staged disclosure design, not a promise that the system stores no sensitive information.",
         ],
       },
+      {
+        heading: "Make transfer feasibility a first-class contract",
+        paragraphs: [
+          "A transfer edge is not simply “the next ride starts nearby.” It is a contract between two ride segments: the first must reach a compatible meeting point, the second must leave late enough for the rider to get there, and the combined itinerary must remain inside the requested arrival window. The minimum transfer buffer can vary by location, accessibility needs, and whether a walk between pickup points is required.",
+          "I model a candidate itinerary as immutable legs plus derived connection data. That makes it possible to recalculate feasibility when a ride changes without mutating the user's original search request. It also gives the interface concrete reasons for rejecting an otherwise nearby option: the departure is too early, the walk is too long, the wait exceeds the limit, or the vehicle has no remaining seat.",
+          "A Spring Boot service can keep the responsibilities separate: an adapter fetches candidate rides, a routing component explores feasible continuations, and an itinerary composer converts the winning path into a stable response. This is a design sketch rather than a claim about a deployed production service; the important boundary is that graph search returns candidates while booking revalidates inventory and creates a seat hold transactionally.",
+        ],
+        code: {
+          language: "java",
+          title: "Illustrative connection check",
+          source: `boolean canConnect(Ride first, Ride next, Duration minBuffer, Duration maxWait) {
+    if (!first.dropoff().equals(next.pickup())) return false;
+    Duration wait = Duration.between(first.arrivesAt(), next.departsAt());
+    return wait.compareTo(minBuffer) >= 0
+        && wait.compareTo(maxWait) <= 0
+        && first.arrivesAt().isBefore(next.departsAt());
+}`,
+        },
+      },
+      {
+        heading: "Choose an algorithm by the promise you can keep",
+        paragraphs: [
+          "Dijkstra is a strong baseline when every transition has a non-negative cost and the state includes everything needed to determine the next feasible ride. A* can reduce work when its heuristic is a genuine lower bound—for example, straight-line distance divided by an optimistic maximum speed. A heuristic that overestimates can make the search faster but invalidates the shortest-path guarantee.",
+          "The bigger decision is often not Dijkstra versus A*. It is which constraints belong in the state, which are hard exclusions, and which are soft preferences. A maximum transfer count is a hard bound; a preference for shorter waits may be a cost. Mixing these categories can produce surprising results and makes the score hard to explain.",
+          "For an early product, a bounded, deterministic search with explicit limits is often more useful than a theoretically sophisticated planner that returns opaque choices. Record why a candidate was discarded, make scoring weights inspectable, and compare ranked results against hand-built scenarios before tuning for speed.",
+        ],
+        table: {
+          headers: ["Choice", "Best fit", "Trade-off"],
+          rows: [
+            ["Dijkstra", "Reliable baseline for non-negative route costs", "May explore more of the candidate graph"],
+            ["A*", "Large searches with a valid lower-bound heuristic", "Correctness depends on an admissible heuristic"],
+            ["Time-expanded graph", "Explicit schedules and transfer states", "More vertices and edges as time resolution grows"],
+          ],
+        },
+      },
+      {
+        heading: "Treat search results as expiring proposals",
+        paragraphs: [
+          "A route result is a snapshot, not a promise that all seats still exist. Each response should carry enough version and expiry information for the booking flow to revalidate every leg. If one segment disappears, the system should explain which connection broke and offer a fresh search; silently replacing a driver or transfer undermines informed consent.",
+          "Idempotency keys make a retry safe when a rider submits a booking and the response is lost. A short-lived hold can reserve all required seats together or release them as a unit, avoiding a partially booked itinerary. These mechanics are as important to a practical multi-hop journey as the path-finding algorithm itself.",
+          "The product succeeds when it can explain the route, show the waits and handoffs, protect private details until the rider is verified, and recover cleanly when availability changes. A shortest path is only the beginning of that promise.",
+        ],
+      },
+      {
+        heading: "Rank routes with an explainable objective",
+        paragraphs: [
+          "A ranking function turns product priorities into behavior, so its units and limits deserve review. One practical score can combine elapsed minutes, transfer count, expected wait, detour, and a reliability penalty. Normalize each term before weighting it; otherwise, a large value measured in minutes can dominate a small count simply because the numbers have different scales. Keep hard safety constraints outside this score so a cheap but infeasible trip can never win.",
+          "The score should also preserve diversity. If the top ten results are nearly identical itineraries with the same first leg, the search has not helped the rider compare meaningful choices. Group by shared legs or transfer pattern, cap near-duplicates, and present a few alternatives such as fastest, fewest transfers, and lowest wait. Explain those labels with visible details instead of exposing a mysterious numerical rating.",
+          "Weights are hypotheses about user preferences, not permanent truths. Test them against realistic journeys: a direct ride with a modest detour, two short rides with a reliable transfer, a long layover that improves arrival certainty, and a route that is fast but depends on a narrow connection. Ask reviewers which option they would choose and why. If the ordering conflicts with the explanation shown in the UI, either the score or the product language needs revision.",
+          "The same evaluation set can catch regressions as route supply changes. Keep deterministic fixtures for transfer boundaries, late departures, cancellations, duplicated rides, and maximum detours. Add property checks such as non-decreasing arrival times across legs and no repeated ride in a path. Then benchmark candidate generation separately from graph traversal; optimizing the search loop will not help if spatial filtering dominates the request.",
+        ],
+      },
     ],
   },
   {
     slug: "inside-attentionlens",
-    title: "Inside AttentionLens",
-    category: "Engineering / AI",
+    title: "Deconstructing Transformers: A Systems Engineer’s View of Self-Attention",
+    category: "Systems / AI Internals",
+    readingMinutes: 7,
     date: "October 2026",
     excerpt:
-      "How an interactive view of tokens, attention heads, and QKV transformations can make Transformer mechanics easier to explore.",
+      "Treating neural networks like observable backend systems by profiling tokenization, QKV matrix transformations, and multi-head attention in real time.",
     intro:
       "Transformers can be described with equations, but equations alone do not always help a learner build intuition. AttentionLens is an interactive project that makes one part of that machinery visible: how token representations interact through self-attention.",
     sections: [
@@ -236,15 +289,80 @@ export const blogArticles = [
           "AttentionLens is valuable when it helps a student or engineer move from passive curiosity to a testable hypothesis. The display is a window into selected operations, not a complete map of model cognition. That distinction makes the project more credible, not less ambitious.",
         ],
       },
+      {
+        heading: "Follow one token through Q, K, and V",
+        paragraphs: [
+          "After token IDs are embedded and combined with positional information, a layer projects each hidden state into three learned views. Queries represent what a position is seeking, keys represent what positions expose for matching, and values carry the information that is mixed into the result. These are useful intuitions, not literal descriptions of a model's intent.",
+          "For one head, the familiar operation is Attention(Q, K, V) = softmax((QKᵀ) / √dₖ + M)V. The dot product produces compatibility scores; scaling controls their magnitude; an optional mask M removes invalid positions; softmax turns scores into weights; and the weighted values produce a new representation. Multiple heads perform this with different learned projections before their outputs are combined.",
+          "A good inspection surface makes the dimensions explicit. If an input has sequence length n, model width d, and h heads, each head commonly works at width d/h. Showing the tensor shape next to the selected layer prevents a two-dimensional heatmap from hiding the batch, head, and token axes that gave rise to it.",
+        ],
+        code: {
+          language: "python",
+          title: "Illustrative single-head attention",
+          source: `scores = (query @ key.transpose(-2, -1)) / math.sqrt(key.size(-1))
+if attention_mask is not None:
+    scores = scores.masked_fill(attention_mask == 0, float("-inf"))
+weights = torch.softmax(scores, dim=-1)
+context = weights @ value`,
+        },
+      },
+      {
+        heading: "Build a visual trace that stays aligned",
+        paragraphs: [
+          "The visual pipeline begins before the heatmap. The tokenizer can add special tokens, split a single visible word into multiple pieces, and return offsets into the source string. If the interface labels a token using only its raw ID, a learner cannot tell which characters it came from; if it merges subword pieces without explaining the merge, it can imply a computation the model did not perform.",
+          "AttentionLens should keep a stable mapping from each displayed token to its token index and source span. Selecting a token can then highlight the corresponding row, while selecting a destination highlights a column. The same selection should identify the active layer and head in every panel so the user can move from text to scores to the resulting weighted context without losing state.",
+          "Masks are not decoration. A causal mask blocks future positions in decoder self-attention; a padding mask excludes filler positions. The rendering should distinguish a true zero weight from a cell that was masked before softmax. Otherwise, the visualization can look plausible while teaching the wrong operation.",
+        ],
+        image: {
+          src: "/img/blog/attentionlens.svg",
+          alt: "Token embeddings split into query, key, and value projections, producing scaled attention scores and a token-aligned heatmap.",
+          caption: "Keep token identity, tensor dimensions, masks, and the selected head visible together.",
+          width: 960,
+          height: 480,
+        },
+      },
+      {
+        heading: "Use interaction to test hypotheses, not declare explanations",
+        paragraphs: [
+          "A useful lesson is comparative. Start with a short sentence, change one token, and inspect whether a particular head's pattern changes. Then repeat the experiment with another layer or head. Controlled inputs make it easier to notice patterns; they still do not prove that a highlighted relation caused the model's final output.",
+          "Attention is one internal signal among many. It can be informative about token mixing, but it is not a universal explanation of model behavior. To investigate a stronger causal claim, a learner may need interventions such as ablation, activation patching, or comparison with other attribution methods. AttentionLens should make those boundaries part of the interaction rather than hiding them in a disclaimer.",
+          "For performance, avoid rendering every head and every token at once. Let people choose a layer and head, cap the sequence length with a visible notice, and keep labels readable at mobile sizes. An inspector that faithfully shows one operation is more valuable than a dense dashboard that implies completeness but cannot be read.",
+        ],
+        table: {
+          headers: ["View", "What it helps inspect", "What it does not establish"],
+          rows: [
+            ["Token alignment", "Which token IDs correspond to input spans", "Why the model selected its final answer"],
+            ["Attention weights", "How a selected head distributes attention", "A complete causal explanation of behavior"],
+            ["Q/K/V projections", "How hidden states enter an attention operation", "A human-readable semantic role for every dimension"],
+          ],
+        },
+      },
+      {
+        heading: "Separate model work from interactive rendering",
+        paragraphs: [
+          "An inspector has two different workloads: producing model outputs and letting a person explore them. Keep those responsibilities decoupled. A model adapter can return a compact response containing token IDs, token offsets, selected-layer attention values, and shape metadata; the presentation layer can then render the chosen view without loading full tensors into a browser. This boundary also makes it easier to compare another model or tokenizer later.",
+          "Attention tensors can be large even for modest sequences. If a request returns every layer, head, and token pair, memory use grows quickly and the visualization becomes overwhelming. Let the user choose a layer and head, cap long inputs with an explicit message, and cache only the expensive results that are safe to reuse. If the model runs remotely, expose inference latency and failure states rather than leaving a heatmap panel blank.",
+          "Interactive details should reinforce the same index mapping everywhere: hover or keyboard focus on a token should highlight its row; selecting a destination should reveal the corresponding column; the head and layer should remain visible in the panel title. Provide a non-color cue for selected and masked cells so the chart remains understandable to people who cannot distinguish the palette.",
+        ],
+      },
+      {
+        heading: "Validate the visualization against known computations",
+        paragraphs: [
+          "Before asking whether a heatmap is insightful, ask whether it is correct. Use a tiny synthetic sequence where attention masks and shapes can be checked by hand. Compare extracted tensors with the model library's returned attention values for the same input, model revision, evaluation mode, and tokenizer. Small floating-point differences can be expected across devices, but axes, token order, and masking behavior should agree.",
+          "A useful test suite checks invariants: each unmasked attention row sums approximately to one after softmax; masked positions contribute no probability; the number of rendered token labels matches the tokenizer output; and changing the selected head updates the data, not just the heading. Snapshot tests help catch layout drift, while numerical tests catch a more dangerous class of errors that still produces a polished image.",
+          "Finally, make the limits visible in the product itself. Show the model and tokenizer identifiers, selected layer and head, and whether the view represents pre- or post-dropout attention. Keep an explanation close to the chart: the visualization exposes a computation, not a complete account of reasoning. This combination of provenance, numerical validation, and honest framing gives learners a surface they can question rather than merely admire.",
+        ],
+      },
     ],
   },
   {
     slug: "atlassian-event-orchestration",
-    title: "Orchestrating Large-Scale Events Using the Atlassian Ecosystem",
-    category: "Engineering / AI & Operations",
+    title: "Treating High-Scale Operations Like a Distributed State Machine",
+    category: "Systems / Workflow Automation",
+    readingMinutes: 6,
     date: "October 2026",
     excerpt:
-      "A practical coordination model combining Jira execution, Confluence context, and Atlassian Rovo AI assistance.",
+      "Replacing manual coordination bottlenecks with event-driven workflows, structured context pipelines, and custom Rovo AI agents.",
     intro:
       "A complex event is a project disguised as a date on a calendar. Jira, Confluence, and Atlassian Rovo can work together as a coordination system—if each has a clear role and AI suggestions stay grounded in evidence.",
     sections: [
@@ -293,23 +411,98 @@ export const blogArticles = [
           "Finally, review permissions and retention. Event plans can include attendee information, vendor terms, and internal decisions. Connect only the knowledge spaces the workflow needs, avoid copying personal data into broad channels, and decide how long operational records should remain available.",
         ],
       },
+      {
+        heading: "Use a state machine for operational readiness",
+        paragraphs: [
+          "A checklist is useful, but a readiness state is more useful when it has a defined meaning. For example, an event can move from Draft to Planning, Ready for Review, Approved, Live, and Closed. Each transition should declare its prerequisites: a venue confirmation may be required before approval, while a post-event report belongs after closeout.",
+          "This model prevents dashboards from presenting a pile of completed tasks as a reliable event status. A task can be done while a dependency is still unresolved; a state transition can evaluate the critical prerequisites and surface the blocker. Jira issue types, workflow conditions, and automation rules can express parts of this contract, while Confluence documents what each state means to the people using it.",
+          "The model should remain simple enough that event owners can predict it. If a transition cannot be explained without reading automation source, the workflow is too clever. Start with a few meaningful gates, name the owner for each decision, and add automation only where it removes repetitive coordination without concealing accountability.",
+        ],
+        table: {
+          headers: ["State", "Evidence required", "Human decision"],
+          rows: [
+            ["Planning", "Brief, scope, owner, and target date", "Confirm the event is worth planning"],
+            ["Ready for review", "Critical tasks assigned; risks and costs visible", "Review scope and unresolved dependencies"],
+            ["Approved", "Required approvals and fallback plans recorded", "Authorize commitments and communications"],
+            ["Closed", "Actuals, feedback, incidents, and follow-ups captured", "Accept closeout and archive the runbook"],
+          ],
+        },
+      },
+      {
+        heading: "Treat webhooks as at-least-once signals",
+        paragraphs: [
+          "Integrations should assume that webhook delivery can be delayed, duplicated, or arrive out of order. A receiver should validate the request, store the provider event identifier, acknowledge quickly, and process work asynchronously. If the same event arrives again, idempotency prevents a second Jira issue or a repeated external notification.",
+          "Do not use an event payload as the only source of truth. Fetch current issue state when necessary, compare the transition with the last processed version, and make the handler safe to retry. If a downstream API is unavailable, record a retryable job and expose the failure to an operator instead of dropping the event after a successful HTTP response.",
+          "The following is deliberately provider-neutral pseudocode: actual webhook signatures, event fields, and retry contracts differ by product and configuration. The reliable pattern is durable receipt, idempotent processing, and observable failure—not assuming a webhook behaves like a transaction across three tools.",
+        ],
+        code: {
+          language: "text",
+          title: "Provider-neutral webhook handling",
+          source: `receive(event):
+  verify_signature(event)
+  if event.id already processed: acknowledge and stop
+  persist(event.id, status="received")
+  enqueue(event.id)
+  acknowledge
+
+worker(eventId):
+  load current Jira state
+  apply allowed transition once
+  update Confluence context if required
+  persist status or retryable failure`,
+        },
+      },
+      {
+        heading: "Give Rovo bounded work and evidence",
+        paragraphs: [
+          "A Rovo-assisted workflow is most useful for discovery and preparation: find similar past events, summarize approved source material, identify conflicting dates, or draft a checklist. The result should carry references back to Confluence pages and Jira issues, along with a timestamp or version where the integration exposes one. That lets an event lead verify whether a recommendation is still current.",
+          "Keep generated content outside the source of truth until a person accepts it. An agent can prepare a proposed set of tasks, but creating assignments, promising a budget, or sending a broad announcement should require an authorized human decision. Permission trimming matters: the workflow must not expose content the requesting user could not access directly.",
+          "When sources disagree, the system should report the conflict rather than choose the latest-looking sentence. When a source is unavailable, it should label the gap. These behaviors turn Rovo from an opaque authority into a useful coordination assistant that helps teams find context faster while leaving responsibility visible.",
+        ],
+      },
+      {
+        heading: "Measure operational confidence, not automation volume",
+        paragraphs: [
+          "A successful integration is not measured by how many Jira issues it creates. Track whether critical dependencies are discovered earlier, how long high-risk blockers remain unresolved, whether teams can identify the current runbook, and how often an automation needs manual repair. For AI-generated drafts, sample outputs for citation coverage, stale facts, and human correction.",
+          "Keep the event itself resilient to a broken integration. The runbook should be readable without the AI layer, essential decisions should have human owners, and an operator should be able to resume a workflow from durable state. The system is valuable when it shortens coordination loops; it is trustworthy when it also makes its own limits and failures visible.",
+          "Together, Jira, Confluence, and Rovo can connect execution, durable context, and discovery. Their value comes from a well-defined handoff between those responsibilities—not from collapsing them into one automation that nobody can inspect.",
+        ],
+      },
+      {
+        heading: "Design the event-day operating picture",
+        paragraphs: [
+          "Planning data becomes most valuable when the event is underway. The runbook should answer a small set of urgent questions quickly: what is happening now, who owns the next transition, which supplier or speaker is not confirmed, and how the team escalates a problem. Keep the live view focused on these operational facts rather than reproducing every planning document in one crowded dashboard.",
+          "A readiness view can be generated from Jira status and dependencies, but it should distinguish a task that is merely late from a critical blocker that threatens a commitment. Define severity and escalation rules with the people who operate the event. Give each alert a named owner, response expectation, and fallback contact. A message without a next action is noise, especially during a live operation.",
+          "Confluence provides a natural home for the canonical runbook and decision log. Jira can link to the relevant section from each high-priority task. If Rovo summarizes changes during a planning review, preserve the source links and have an owner confirm that the update belongs in the runbook. This keeps the operational view useful without letting generated summaries silently rewrite the plan.",
+        ],
+      },
+      {
+        heading: "Make integration state observable and recoverable",
+        paragraphs: [
+          "An integration should expose its own health: last successful sync, oldest queued event, retry count, and events that need human attention. A green Jira board does not prove that a Confluence update succeeded, and a generated summary does not prove that it used the latest approved source. These are different signals and should be monitored separately.",
+          "Use a durable event log or queue for cross-tool work where losing an update would matter. Record the source event ID, the target issue or page, the attempted operation, and the result. If an API call times out after it may have succeeded, retrieve current state before retrying. Idempotency keys or deduplication records help prevent a second issue, comment, or notification.",
+          "Most importantly, the event must still run if an integration is unavailable. Keep contact lists and key timings in the approved runbook, nominate a human to own manual updates, and test the fallback before event day. An automation is operationally mature when its failure is visible and the team can continue safely—not when the happy-path demo looks seamless.",
+        ],
+      },
     ],
   },
   {
     slug: "make-failure-legible",
-    title: "The Quiet Contract of Systems: Make Failure Legible",
-    category: "Engineering / Systems",
+    title: "Zero-Trust Data Migration: Validating 300M+ Records from C to Java",
+    category: "Java / Distributed Data & AI",
+    readingMinutes: 9,
     date: "October 2026",
     excerpt:
-      "Reliability is not the promise that nothing fails; it is the promise that failure will not masquerade as success.",
+      "Why silent data corruption is the hardest distributed systems bug—and how I built a Java/PySpark diff engine with an autonomous AI triage agent to cut debugging time by 40%.",
     intro:
-      "A system makes promises even when no one writes them down. The hardest failures are often not crashes, but broken promises that still produce a green checkmark.",
+      "During enterprise modernization work involving more than 300 million financial records, the riskiest failures were not always crashes. A migration could finish cleanly and still change a field, drop a record, or alter a business rule. The answer was not to trust a green status; it was to compare outputs systematically, make discrepancies inspectable, and use PRISM to accelerate the investigation without handing it authority over the evidence.",
     sections: [
       {
         heading: "Define the contract at every boundary",
         paragraphs: [
           "An API promises a response shape. A booking flow promises that a seat shown as available can still be claimed. An AI assistant promises—sometimes by tone alone—that its answer is grounded enough to act on.",
           "Each boundary needs a clear contract: what the caller provides, what the service guarantees, and which errors are retryable or final. A route-search service should distinguish “no feasible itinerary” from “search could not complete” and “results may be stale.” Those states lead to different decisions.",
+          "A data migration has an equally important contract: which input rows should be present, how fields are interpreted, which transformations are permitted to change, and how output completeness is established. C and Java can differ in representation, numeric conversion, string handling, and null conventions. If those rules remain implicit, a program can produce a syntactically valid file while violating the business meaning of the record.",
         ],
       },
       {
@@ -320,9 +513,9 @@ export const blogArticles = [
           "Observability helps engineers investigate through logs, metrics, and traces. Products also need user-facing observability: clear progress, visible uncertainty, and recovery choices that reflect the actual state.",
         ],
         image: {
-          src: "/img/blog/failure-contract.svg",
-          alt: "A system flow showing an explicit contract, observable states, and a safe recovery path when an operation fails.",
-          caption: "Reliable systems make failure legible and recovery safe.",
+          src: "/img/blog/prism-reconciliation.svg",
+          alt: "A migration comparison pipeline normalizes legacy C and Java outputs, produces field-level differences, and gives PRISM evidence for a human-reviewed PySpark investigation.",
+          caption: "PRISM helps investigate discrepancies; the comparison output remains the source of evidence.",
           width: 960,
           height: 480,
         },
@@ -350,6 +543,88 @@ export const blogArticles = [
           "A dependable system does not claim that every response is certain or every dependency is healthy. It makes the limits visible, records what actually happened, and offers a recovery path that matches reality.",
         ],
       },
+      {
+        heading: "Compare meaning, not just bytes",
+        paragraphs: [
+          "A field-by-field diff is useful only when its comparison rules match the domain contract. Byte equality can flag harmless serialization differences such as padding or format changes; loose equality can hide important distinctions such as a missing value versus an explicit zero. Normalize only where the contract permits it, and keep both raw and normalized values in the evidence record.",
+          "A reliable reconciliation pass starts with structural checks: counts, duplicate keys, missing keys, and unexpected records. It then compares mapped fields using explicit rules for nulls, dates, scale, whitespace, and code pages. Differences should be categorized—missing row, extra row, field mismatch, parse failure—so an engineer can route each class to the right investigation instead of staring at one enormous text diff.",
+          "At enterprise scale, partitioning and deterministic keys make the work tractable. Comparisons can be distributed across partitions, but the output must remain reproducible: stable sort keys, run identifiers, source file checksums, schema versions, and code versions help answer which exact inputs produced a mismatch. The following Java example is illustrative; it shows the comparison boundary rather than proprietary production code.",
+        ],
+        code: {
+          language: "java",
+          title: "Illustrative field-level comparison",
+          source: `for (String field : schema.comparableFields()) {
+    Object oldValue = normalize(field, legacy.get(field));
+    Object newValue = normalize(field, modern.get(field));
+
+    if (!Objects.equals(oldValue, newValue)) {
+        differences.add(new FieldDifference(
+            recordKey, field, oldValue, newValue, runId));
+    }
+}`,
+        },
+        table: {
+          headers: ["Difference class", "Example", "Useful next check"],
+          rows: [
+            ["Missing key", "Legacy row has no Java counterpart", "Partition counts, key parsing, filtering rules"],
+            ["Field mismatch", "Same key, different normalized amount", "Scale, rounding, sign, and business-rule mapping"],
+            ["Schema mismatch", "Unexpected or absent output column", "Schema version, mapping configuration, serializer"],
+            ["Duplicate key", "More than one row for a supposedly unique key", "Join cardinality, source duplication, deduplication contract"],
+          ],
+        },
+      },
+      {
+        heading: "Let PRISM turn comparison evidence into a focused query",
+        paragraphs: [
+          "The comparison engine narrows the search space; PRISM helps make the next investigation faster. The agent can use schema and data-architecture context to interpret categorized compare logs, identify relevant partitions and columns, and draft a PySpark query that fetches a small, explainable sample. This is the practical role of AI in the workflow: reduce repetitive query-authoring, not invent a root cause.",
+          "A generated query should be constrained to approved datasets and known columns, validated before execution, and presented with the compare-log entries that motivated it. It should not receive unrestricted access to production data simply because a prompt asks for more context. Engineers still verify the sample, inspect transformation logic, and decide whether a discrepancy is a defect, an intentional behavior change, or an unresolved rule.",
+          "A representative PySpark investigation might isolate a known mismatch class by run, partition, and field. The exact table names and column mappings are environment-specific, so this snippet is illustrative and uses neutral identifiers.",
+        ],
+        code: {
+          language: "python",
+          title: "Illustrative PySpark triage query",
+          source: `mismatches = (
+    spark.read.table("reconciliation.field_differences")
+    .where(col("run_id") == requested_run)
+    .where(col("field_name") == requested_field)
+    .select("record_key", "legacy_value", "java_value", "partition_id")
+    .limit(100)
+)
+mismatches.orderBy("partition_id", "record_key").show(truncate=False)`,
+        },
+      },
+      {
+        heading: "Protect correctness while reducing triage time",
+        paragraphs: [
+          "The result of a comparison system is not only a pass or fail. It is an investigation trail: what was compared, how values were normalized, which fields differed, and what query or follow-up action was proposed. That makes a repeated migration run easier to reason about and gives reviewers a basis for approving changes without relying on memory.",
+          "The reported outcome of this work was reconciliation across more than 1,000 assets containing millions of records and a 40% reduction in Spark-job failure triage time. The important distinction is that faster triage came from structured evidence and a targeted assistant working together—not from asking a language model to certify financial data.",
+          "For any migration involving sensitive records, examples and logs should avoid exposing unnecessary personal or financial information. Use stable non-sensitive identifiers where possible, constrain retention, redact values that are not needed for diagnosis, and audit access to the reconciliation output. Observability should improve correctness without creating a second uncontrolled copy of the data.",
+        ],
+      },
+      {
+        heading: "Make the failure legible to the next engineer",
+        paragraphs: [
+          "A useful report gives the next engineer a starting point: run ID, code and schema versions, input fingerprints, counts, affected partitions, mismatch categories, and representative records with sensitive values protected. It also makes the status explicit: comparison completed, comparison incomplete, query generation failed, or a human decision is still required.",
+          "That information turns a failure from a vague red indicator into a sequence of testable questions. Did the source change? Did a transformation behave differently? Is the mismatch expected under a new rule? Did a data-quality issue arrive before the migration? The team can answer those questions with evidence and record the decision for the next run.",
+          "Reliability is not pretending every migration is correct on the first attempt. It is making incorrectness detectable, investigation repeatable, and recovery safer than guesswork.",
+        ],
+      },
+      {
+        heading: "Use shadow comparisons before switching traffic",
+        paragraphs: [
+          "A safer migration strategy compares legacy and modern behavior before the new implementation becomes authoritative. Run both versions against the same controlled inputs where practical, preserve the source and output fingerprints, and reconcile the results in a shadow workflow. This exposes differences while the legacy path is still available as a reference. For large batch workloads, comparisons can be staged by asset or partition so teams can learn from a representative slice before broadening the run.",
+          "The acceptance gate should be explicit. Define which fields must match exactly, which are normalized by contract, which differences require a business decision, and what completeness checks must pass. Do not reduce this to “the Spark job finished.” A successful job can still omit an input partition or write a partially correct output. Track processed counts, rejected records, duplicate keys, and categorized differences alongside execution status.",
+          "When a mismatch is approved as an intentional behavior change, record the rule, owner, evidence, and effective version. That turns the next migration run into a comparison against a known decision rather than reopening an old debate. It also keeps the validation harness from treating every difference as an error or, just as dangerously, teaching it to ignore a difference with no documented reason.",
+        ],
+      },
+      {
+        heading: "Measure the investigation loop, not just job duration",
+        paragraphs: [
+          "Batch duration is only one part of migration efficiency. A faster run can still leave engineers searching logs for hours. Useful operational measures include the time from first mismatch to a reproducible query, the fraction of differences categorized automatically, the number of manual reruns needed, and how often an investigation identifies a data issue versus a code defect. These metrics reveal whether diagnostics actually help.",
+          "The 40% triage-time reduction associated with the PRISM work is meaningful because it concerns the investigation loop, not a claim that the model made the migration correct. Preserve a baseline and compare equivalent classes of failures; otherwise, a shift in workload can make the metric misleading. Review samples of generated queries and human corrections to see whether the assistant is helping consistently or only on easy cases.",
+          "Finally, retain less data, not more. A durable run identifier and masked keys may be enough to connect the report to secure source records. Avoid placing full financial values in prompts or broad logs, apply access controls to reconciliation outputs, and define retention limits. Good failure visibility makes a system easier to repair without making sensitive information easier to expose.",
+        ],
+      },
     ],
   },
 ] as const;
@@ -357,6 +632,8 @@ export const blogArticles = [
 type BlogArticle = (typeof blogArticles)[number];
 
 export function getArticleReadTime(article: BlogArticle) {
+  if ("readingMinutes" in article && article.readingMinutes) return `${article.readingMinutes} min`;
+
   const words = [
     article.title,
     article.intro,

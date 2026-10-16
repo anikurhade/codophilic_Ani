@@ -47,6 +47,20 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
           <section key={`${article.slug}-${index}`}>
             {"heading" in section && <h2>{section.heading}</h2>}
             {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            {"code" in section && section.code && (
+              <figure className="article-code">
+                <figcaption>{section.code.title} · {section.code.language}</figcaption>
+                <pre><code>{section.code.source}</code></pre>
+              </figure>
+            )}
+            {"table" in section && section.table && (
+              <div className="article-table-wrap">
+                <table className="article-table">
+                  <thead><tr>{section.table.headers.map((header) => <th key={header} scope="col">{header}</th>)}</tr></thead>
+                  <tbody>{section.table.rows.map((row) => <tr key={row[0]}>{row.map((cell) => <td key={cell}>{cell}</td>)}</tr>)}</tbody>
+                </table>
+              </div>
+            )}
             {"image" in section && section.image && (
               <figure className="article-figure">
                 <Image
