@@ -23,7 +23,7 @@ export default function InsightsFeed() {
           </Link>)
           : verses.map((verse) => <article className="medium-card verse-card" key={verse.title}>
             <div className="medium-overlay" /><div className="medium-meta mono"><span>{verse.language}</span><span>original</span></div>
-            <h3>{verse.title}</h3><p className="whitespace-pre-line">{verse.text}</p>
+            <h3>{verse.title}</h3><p lang={verse.language === "Marathi" ? "mr" : verse.language === "Hindi" ? "hi" : verse.language === "Hinglish" ? "hi-Latn" : "en"} className="whitespace-pre-line">{verse.text}</p>
           </article>)}
       </motion.div>
     </AnimatePresence>
