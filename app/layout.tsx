@@ -10,12 +10,12 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "Anirudha Kurhade — Backend Architect & AI Engineer",
-  description: "Anirudha Kurhade is a Software Development Engineer specializing in Generative AI, robust data pipelines, and scalable backend architecture.",
+  title: "Anirudha Kurhade — Java & Distributed Systems Engineer",
+  description: "Anirudha Kurhade builds Java and Spring Boot backends, distributed data pipelines, and applies AI to practical engineering bottlenecks.",
   metadataBase: new URL("https://anirudhakurhade.vercel.app"),
   alternates: { canonical: "/" },
-  openGraph: { title: "Anirudha Kurhade — Backend Architect & AI Engineer", description: "Software Development Engineer building intelligent systems and scalable backend platforms.", type: "website", url: "/" },
-  twitter: { card: "summary_large_image", title: "Anirudha Kurhade — Backend Architect & AI Engineer", description: "Software Development Engineer building intelligent systems and scalable backend platforms." },
+  openGraph: { title: "Anirudha Kurhade — Java & Distributed Systems Engineer", description: "Java, Spring Boot, distributed data systems, and practical AI engineering.", type: "website", url: "/" },
+  twitter: { card: "summary_large_image", title: "Anirudha Kurhade — Java & Distributed Systems Engineer", description: "Java, Spring Boot, distributed data systems, and practical AI engineering." },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -61,7 +61,7 @@ export default function CreativeGallery() {
     <section className="section sunset-section" id="creative">
       <div className="section-head">
         <div>
-          <p className="eyebrow">04 / beyond the terminal</p>
+          <p className="eyebrow">06 / beyond the terminal</p>
           <h2>
             The other
             <br />

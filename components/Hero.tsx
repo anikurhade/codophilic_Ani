@@ -4,6 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { PointerEvent } from "react";
+import { portfolioProfile } from "@/content/portfolio";
 import PromptChallengeTerminal from "./PromptChallengeTerminal";
 
 const title = "Anirudha Kurhade";
@@ -14,7 +15,7 @@ export default function Hero() {
   const pointerY = useSpring(useMotionValue(0), { stiffness: 120, damping: 18 });
   const rotateX = useTransform(pointerY, [-240, 240], [5, -5]);
   const rotateY = useTransform(pointerX, [-240, 240], [-5, 5]);
-  const phrase = "Backend Architect // AI Engineer";
+  const phrase = portfolioProfile.role;
 
   useEffect(() => {
     let index = 0;
@@ -38,7 +39,7 @@ export default function Hero() {
       <div className="sunset-hero-inner">
         <div className="hero-copy">
           <motion.p className="eyebrow" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <i /> SOFTWARE DEVELOPMENT ENGINEER / SYSTEMS &amp; AI
+            <i /> SOFTWARE DEVELOPMENT ENGINEER / JAVA, DISTRIBUTED SYSTEMS &amp; APPLIED AI
           </motion.p>
           <h1 aria-label={title}>
             {title.split(" ").map((word, wordIndex) => (
@@ -56,12 +57,13 @@ export default function Hero() {
             {typed}<span className="type-caret">▋</span>
           </motion.p>
           <motion.p className="hero-text" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.35 }}>
-            I design LLM-assisted platforms, resilient data pipelines, and backend systems that help high-velocity teams move with confidence.
+            I build Java and Spring Boot backends, distributed data pipelines, and systems for high-volume workloads. When a real bottleneck calls for it, I add focused AI diagnostics and automation.
           </motion.p>
-          <a className="hero-game-teaser" href="#ai-game"><span aria-hidden="true">▶</span><span><strong>Play the AI Game</strong><small>Crack the prompt challenge to unlock a secret badge and resume perk.</small></span><span aria-hidden="true">↘</span></a>
+          <a className="hero-game-teaser" href="#ai-game"><span aria-hidden="true">▶</span><span><strong>Play the AI Game</strong><small>Crack the prompt challenge to unlock a secret explorer badge.</small></span><span aria-hidden="true">↘</span></a>
           <PromptChallengeTerminal />
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.55 }}>
             <a className="glass-cta primary" href="#work">View Architecture (Projects) <ArrowUpRight size={15} /></a>
+            <a className="glass-cta" href="/files/Anirudha Kurhade Resume.pdf" download>Download Resume (PDF) <ArrowUpRight size={15} /></a>
             <a className="glass-cta" href="/blog">Read Logs (Blog) <ArrowUpRight size={15} /></a>
             <a className="glass-cta" href="#contact">Connect <ArrowUpRight size={15} /></a>
           </motion.div>
@@ -70,10 +72,10 @@ export default function Hero() {
           <motion.div className="terminal-window bg-zinc-50 text-zinc-800 border-zinc-200 shadow-[0_0_18px_rgba(249,115,22,0.12)] dark:bg-[#18181b] dark:text-zinc-300 dark:border-zinc-800 dark:shadow-[0_0_18px_rgba(249,115,22,0.28)]" style={{ rotateX, rotateY }}>
             <div className="terminal-bar"><span /><span /><span /><small className="mono">anirudha@systems:~</small></div>
             <div className="terminal-content mono text-zinc-800 dark:text-zinc-300">
-              <p><b>$</b> ./build-intelligence --scale</p>
-              <p className="terminal-muted">loading architecture...</p>
+              <p><b>$</b> ./jvm-engine --migrate-legacy --records=300M+</p>
+              <p className="terminal-muted">validating migration output...</p>
               <div className="terminal-orb"><div className="orb-core" /><div className="orb-ring ring-a" /><div className="orb-ring ring-b" /></div>
-              <p className="terminal-success">✓ systems ready / latency: 40% lower</p>
+              <p className="terminal-success">✓ schema checks passed / triage time: 40% lower</p>
               <p><b>$</b> <span className="terminal-caret">_</span></p>
             </div>
           </motion.div>
