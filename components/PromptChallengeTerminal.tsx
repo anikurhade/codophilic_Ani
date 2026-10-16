@@ -22,10 +22,6 @@ export default function PromptChallengeTerminal() {
   const mood = moods[moodIndex];
 
   useEffect(() => {
-    const interval = window.setInterval(() => setMoodIndex((current) => (current + 1) % moods.length), 8000);
-    return () => window.clearInterval(interval);
-  }, []);
-  useEffect(() => {
     try {
       if (window.localStorage.getItem(completionKey) === "true") setIsUnlocked(true);
     } catch (error) {
@@ -59,11 +55,12 @@ export default function PromptChallengeTerminal() {
   return <section id="ai-game" className="prompt-terminal" aria-label="Synesthetic AI prompt challenge" tabIndex={-1}>
     <div className="prompt-terminal-bar"><span className="mono">SYNESTHETIC AI / SECURE SANDBOX</span><span className="prompt-status">● {mood.label.toUpperCase()}</span></div>
     <div className="prompt-game-intro"><strong>PLAY THE AI GAME</strong><span>Read the room. Find the prompt that earns access.</span>{isUnlocked && <span className="game-badge" role="status">✦ AI GAME COMPLETED · EXPLORER BADGE UNLOCKED</span>}</div>
-    <div className="prompt-track"><span>♪ CURRENTLY PLAYING</span><strong>{mood.track}</strong></div>
+    <div className="prompt-track"><span>♪ CURRENTLY PLAYING</span><strong>{mood.track}</strong>{!isUnlocked && <button type="button" onClick={() => setMoodIndex((current) => (current + 1) % moods.length)} aria-label="Choose another music clue">Next clue ↻</button>}</div>
     <div className="prompt-history scrollbar-hide" ref={historyRef} aria-live="polite">
       {history.map((entry, index) => <p className={entry.role === "user" ? "prompt-user" : "prompt-agent"} key={`${entry.role}-${index}`}><b>{entry.role === "user" ? ">" : "AI"}</b> {entry.text}</p>)}
       <AnimatePresence>{isUnlocked && <motion.div className="prompt-confetti" aria-hidden="true" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{Array.from({ length: 10 }, (_, index) => <i key={index} style={{ "--i": index } as React.CSSProperties} />)}</motion.div>}</AnimatePresence>
     </div>
-    {isUnlocked ? <motion.a className="prompt-resume-cta" href="/files/Anirudha Kurhade Resume.pdf" download initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>Download Resume.pdf ↗</motion.a> : <form className="prompt-form" onSubmit={submit}><span className="mono">$</span><input value={input} onChange={(event) => setInput(event.target.value)} aria-label="Mood authorization prompt" placeholder={mood.hint} /><button type="submit" aria-label="Submit prompt">↵</button></form>}
+    {!isUnlocked && <form className="prompt-form" onSubmit={submit}><span className="mono">$</span><input value={input} onChange={(event) => setInput(event.target.value)} aria-label="Mood authorization prompt" placeholder={mood.hint} /><button type="submit" aria-label="Submit prompt">↵</button></form>}
+    {isUnlocked && <motion.a className="prompt-resume-cta" href="/files/Anirudha Kurhade Resume.pdf" download initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>Download Resume.pdf ↗</motion.a>}
   </section>;
 }
