@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { showTransUnionExperience } from "@/content/experience";
 
 const experiences = [
   {
@@ -41,6 +42,8 @@ const experiences = [
 ];
 
 export default function ExperienceTimeline() {
+  if (!showTransUnionExperience) return null;
+
   return (
     <section className="section timeline-section experience-timeline-section" id="experience">
       <div className="section-head">

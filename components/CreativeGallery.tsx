@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { galleryVerses } from "@/content/shayari";
 
 type GalleryPhoto = {
   src: string;
@@ -81,27 +82,13 @@ export default function CreativeGallery() {
         </div>
 
         <div className="grid content-start gap-4">
-          <article className="poem sunset-card">
-            <p className="mono">KAVITA / 01</p>
-            <blockquote>
-              “कभी-कभी,
-              <br />
-              रास्ते मंज़िल से
-              <br />
-              ज़्यादा ज़रूरी होते हैं।”
-            </blockquote>
-            <small>Sometimes, the journey is more important than the destination.</small>
-          </article>
-
-          <article className="poem sunset-card">
-            <p className="mono">SHAYARI / 02</p>
-            <blockquote>
-              “रौशनी ढूँढने निकला था,
-              <br />
-              खुद एक दिया बन गया।”
-            </blockquote>
-            <small>In searching for light, I became a lamp.</small>
-          </article>
+          {galleryVerses.map((verse, index) => (
+            <article className="poem sunset-card" key={verse.title}>
+              <p className="mono">KAVITA / 0{index + 1}</p>
+              <blockquote className="whitespace-pre-line">{verse.text}</blockquote>
+              <small>{verse.translation}</small>
+            </article>
+          ))}
 
           <article className="run-card sunset-card">
             <div>

@@ -11,6 +11,7 @@ const moods: Mood[] = [
   { label: "Soulful", track: "Jagjit Singh — Hothon Se Chhoo Lo Tum", hint: "Try: Please open the file" },
 ];
 const initialHistory: HistoryEntry[] = [{ role: "agent", text: "SYSTEM ARMED: Read the track mood, then request access." }];
+const completionKey = "portfolio-ai-game-completed-v1";
 
 export default function PromptChallengeTerminal() {
   const [moodIndex, setMoodIndex] = useState(0);
@@ -23,6 +24,13 @@ export default function PromptChallengeTerminal() {
   useEffect(() => {
     const interval = window.setInterval(() => setMoodIndex((current) => (current + 1) % moods.length), 8000);
     return () => window.clearInterval(interval);
+  }, []);
+  useEffect(() => {
+    try {
+      if (window.localStorage.getItem(completionKey) === "true") setIsUnlocked(true);
+    } catch (error) {
+      console.error("Could not restore the AI game completion badge.", error);
+    }
   }, []);
   useEffect(() => {
     historyRef.current?.scrollTo({ top: historyRef.current.scrollHeight, behavior: "smooth" });
@@ -38,11 +46,19 @@ export default function PromptChallengeTerminal() {
       : normalized.includes("please") && normalized.includes("open the file");
     setHistory((current) => [...current, { role: "user", text: prompt }, { role: "agent", text: unlocked ? "ACCESS GRANTED. Decrypting resume..." : `Mood defense active. ${mood.hint}` }]);
     setInput("");
-    if (unlocked) setIsUnlocked(true);
+    if (unlocked) {
+      setIsUnlocked(true);
+      try {
+        window.localStorage.setItem(completionKey, "true");
+      } catch (error) {
+        console.error("Could not save the AI game completion badge.", error);
+      }
+    }
   };
 
-  return <section className="prompt-terminal" aria-label="Synesthetic AI prompt challenge">
+  return <section id="ai-game" className="prompt-terminal" aria-label="Synesthetic AI prompt challenge" tabIndex={-1}>
     <div className="prompt-terminal-bar"><span className="mono">SYNESTHETIC AI / SECURE SANDBOX</span><span className="prompt-status">● {mood.label.toUpperCase()}</span></div>
+    <div className="prompt-game-intro"><strong>PLAY THE AI GAME</strong><span>Read the room. Find the prompt that earns access.</span>{isUnlocked && <span className="game-badge" role="status">✦ AI GAME COMPLETED · EXPLORER BADGE UNLOCKED</span>}</div>
     <div className="prompt-track"><span>♪ CURRENTLY PLAYING</span><strong>{mood.track}</strong></div>
     <div className="prompt-history scrollbar-hide" ref={historyRef} aria-live="polite">
       {history.map((entry, index) => <p className={entry.role === "user" ? "prompt-user" : "prompt-agent"} key={`${entry.role}-${index}`}><b>{entry.role === "user" ? ">" : "AI"}</b> {entry.text}</p>)}

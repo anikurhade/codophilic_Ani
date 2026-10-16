@@ -1,4 +1,44 @@
 "use client";
+
 import { useState } from "react";
-const projects = [{ name: "FinForensics", type: "AI / DATA", description: "An intelligent financial forensics system that turns noisy data into defensible insights.", tags: ["Python", "GenAI", "Pipelines"] }, { name: "PRISM", type: "PLATFORM / ARCHITECTURE", description: "A scalable platform architecture designed for secure, reliable data products at TransUnion.", tags: ["Java", "Spring Boot", "Cloud"] }, { name: "AI-Based Food Authenticity", type: "RESEARCH / COMPUTER VISION", description: "Exploring how AI can help people understand the authenticity of everyday spices.", tags: ["Python", "ML", "Research"] }];
-export default function Projects() { const [filter, setFilter] = useState("ALL"); const [active, setActive] = useState<(typeof projects)[number] | null>(null); const filters = ["ALL", "AI / DATA", "PLATFORM / ARCHITECTURE", "RESEARCH / COMPUTER VISION"]; return <section className="section projects" id="work"><div className="section-head"><div><p className="eyebrow">03 / selected projects</p><h2>Work that asks<br /><em>better questions.</em></h2></div></div><div className="filters">{filters.map((item) => <button className={filter === item ? "active" : ""} onClick={() => setFilter(item)} key={item}>{item}</button>)}</div><div className="project-list">{projects.filter((p) => filter === "ALL" || p.type === filter).map((project, index) => <button className="project-row" key={project.name} onClick={() => setActive(project)}><span className="mono">0{index + 1}</span><h3>{project.name}</h3><span className="accent">{project.type}</span><span>↗</span></button>)}</div>{active && <div className="modal-backdrop" onClick={() => setActive(null)}><article className="modal" onClick={(e) => e.stopPropagation()}><button onClick={() => setActive(null)}>Close ×</button><p className="eyebrow">{active.type}</p><h2>{active.name}</h2><p>{active.description}</p><div className="chips">{active.tags.map((tag) => <span key={tag}>{tag}</span>)}</div></article></div>}</section>; }
+import { projects } from "@/content/projects";
+
+const visibleProjects = projects.filter((project) => project.visible);
+const filters = ["ALL", ...new Set(visibleProjects.map((project) => project.category))];
+
+export default function Projects() {
+  const [filter, setFilter] = useState("ALL");
+  const [active, setActive] = useState<(typeof visibleProjects)[number] | null>(null);
+  const shownProjects = visibleProjects.filter((project) => filter === "ALL" || project.category === filter);
+
+  return (
+    <section className="section projects" id="work">
+      <div className="section-head">
+        <div><p className="eyebrow">03 / selected projects</p><h2>Work that asks<br /><em>better questions.</em></h2></div>
+      </div>
+      <div className="filters">{filters.map((item) => <button className={filter === item ? "active" : ""} onClick={() => setFilter(item)} key={item}>{item}</button>)}</div>
+      <div className="project-list">
+        {shownProjects.map((project, index) => (
+          <button className="project-row" key={project.slug} onClick={() => setActive(project)}>
+            <span className="mono">0{index + 1}</span>
+            <h3>{project.title}</h3>
+            <span className="accent">{project.category}</span>
+            <span aria-hidden="true">↗</span>
+          </button>
+        ))}
+      </div>
+      {active && <div className="modal-backdrop" onClick={() => setActive(null)}>
+        <article className="modal" onClick={(event) => event.stopPropagation()}>
+          <button onClick={() => setActive(null)}>Close ×</button>
+          <p className="eyebrow">{active.category} · {active.status}</p>
+          <h2>{active.title}</h2>
+          <p>{active.description}</p>
+          <p>{active.details}</p>
+          {active.highlights.length > 0 && <ul className="project-highlights">{active.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}</ul>}
+          <div className="chips">{active.tech.map((tag) => <span key={tag}>{tag}</span>)}</div>
+          {active.href && <a className="project-link" href={active.href} target="_blank" rel="noopener noreferrer">{active.linkLabel} ↗</a>}
+        </article>
+      </div>}
+    </section>
+  );
+}

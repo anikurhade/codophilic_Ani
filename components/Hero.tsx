@@ -58,6 +58,7 @@ export default function Hero() {
           <motion.p className="hero-text" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.35 }}>
             I design LLM-assisted platforms, resilient data pipelines, and backend systems that help high-velocity teams move with confidence.
           </motion.p>
+          <a className="hero-game-teaser" href="#ai-game"><span aria-hidden="true">▶</span><span><strong>Play the AI Game</strong><small>Crack the prompt challenge to unlock a secret badge and resume perk.</small></span><span aria-hidden="true">↘</span></a>
           <PromptChallengeTerminal />
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.55 }}>
             <a className="glass-cta primary" href="#work">View Architecture (Projects) <ArrowUpRight size={15} /></a>

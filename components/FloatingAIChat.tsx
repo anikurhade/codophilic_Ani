@@ -6,9 +6,9 @@ import { Bot, Send, Sparkles, X } from "lucide-react";
 
 const knowledge = [
   { patterns: [/who (are|is) (you|anirudha)/i, /about (anirudha|him)/i], answer: "I’m the portfolio assistant for Anirudha Kurhade, a Software Engineer focused on Generative AI, data systems, and reliable backend platforms." },
-  { patterns: [/experience/i, /work(ed|ing)?/i, /transunion/i, /prism/i, /career/i], answer: "Anirudha works at TransUnion on PRISM platform architecture and legacy modernization, including moving C-based rules into maintainable Java services." },
+  { patterns: [/experience/i, /work(ed|ing)?/i, /transunion/i, /career/i], answer: "The detailed professional timeline is temporarily hidden from the portfolio. Explore the Projects section for currently featured work." },
   { patterns: [/skill/i, /stack/i, /technology/i, /langgraph/i, /pyspark/i, /java/i], answer: "His core toolkit includes Agentic AI, LangGraph, RAG, PySpark, Apache Spark, Spring Boot, Java, cloud systems, and data pipelines." },
-  { patterns: [/project/i, /finforensics/i, /food/i, /authenticity/i], answer: "Featured work includes FinForensics, PRISM, and AI-Based Food Authenticity for Spices. Scroll to Selected Projects to open each deep-dive." },
+  { patterns: [/project/i, /attentionlens/i, /carpool/i, /music game/i, /prism/i], answer: "Featured work includes AttentionLens, a corporate AI music game, a smart carpool platform in progress, and PRISM. Scroll to Projects to explore the current showcase." },
   { patterns: [/education/i, /degree/i, /college/i, /iit/i, /viit/i, /pgcp/i], answer: "Anirudha has a PGCP in AI Engineering on Cloud and AIOps from IIT Roorkee and a B.Tech in Computer Engineering from VIIT Pune." },
   { patterns: [/contact/i, /email/i, /hire/i, /connect/i], answer: "The quickest way to reach Anirudha is anikurhade2002@gmail.com. You can also use the contact link at the bottom of this page." },
 ];

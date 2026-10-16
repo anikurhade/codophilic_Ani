@@ -28,8 +28,8 @@ components/
   PromptChallengeTerminal.tsx Resume authorization sandbox
   Bento.tsx               About, education, credentials, and principles
   SkillsGrid.tsx          Categorized technical skills
-  ExperienceTimeline.tsx  TransUnion enterprise initiatives
-  ProjectsBento.tsx       Architecture showcase cards
+  ExperienceTimeline.tsx  Reversibly hidden TransUnion experience timeline
+  ProjectsBento.tsx       Data-driven project architecture showcase
   AIChatDrawer.tsx        Slide-over Agentic Twin interface
   MediumInsights.tsx      Medium-style blog insight cards
   CreativeGallery.tsx     Photography, poetry, and running progress
@@ -39,7 +39,11 @@ app/api/
   Navigation.tsx          Responsive site navigation
   SmoothScroll.tsx        Lenis client wrapper
 content/
-  *.mdx                   Blog content sources
+  blogs.ts                Blog metadata and full article content
+  projects.ts             Project case studies and visibility flags
+  shayari.ts              Homepage verses and creative gallery poetry
+supabase/
+  migrations/             Supabase schema and row-level security policies
 public/img/
   Portfolio media and recognition assets
 ```
@@ -94,9 +98,16 @@ Then run the app locally and open `http://127.0.0.1:3000/api/spotify/login`. The
 ## Content updates
 
 - Homepage copy and section composition live in `app/page.tsx` and the component files under `components/`.
-- Blog index metadata is in `app/blog/page.tsx`.
-- Article route content is currently represented by structured article data in `app/blog/[slug]/page.tsx`; the `.mdx` files in `content/` are retained as the content source architecture for future MDX rendering.
+- Projects, blog metadata/article bodies, and shayari are stored in typed data files under `content/`.
+- Set `visible` in `content/projects.ts` to restore the temporarily hidden Bhasha-Token or Nexus Deep-Context RAG cards. `content/experience.ts` controls the temporarily hidden TransUnion timeline.
+- Homepage blog cards and the blog dashboard link directly to statically generated article routes. Each article includes related posts and a comments widget.
 - Images must be placed under `public/img/` and referenced with a root-relative path such as `/img/gallery-mountain-trail.jpeg`.
+
+### Blog comments
+
+Comments use the Supabase REST API and the public anon key; the service-role key is never used by the app. Create a Supabase project, run `supabase/migrations/20261016000000_create_blog_comments.sql`, and set `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `.env.local` and the deployment environment. The API validates comment length, name, and LinkedIn profile URLs; RLS permits public reads and inserts only. Public anonymous inserts can still attract spam, so add a CAPTCHA or moderation workflow before using this on a high-traffic site.
+
+The AttentionLens repository link is included in the project card, but the repository is private; publish it or replace the link with a public demo before launch.
 
 ## Deployment
 
