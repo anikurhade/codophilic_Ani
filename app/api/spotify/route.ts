@@ -37,8 +37,8 @@ function isRateLimited(request: Request) {
 function offlineResponse(status = 200) {
   return NextResponse.json({
     isPlaying: false,
-    title: "Last seen listening to Mohammed Rafi",
-    artist: "Offline mode",
+    title: "Listening feed unavailable",
+    artist: "Check Spotify connection settings",
     albumImageUrl: null,
     songUrl: null,
     source: "offline" satisfies PlaybackSource,
