@@ -99,7 +99,7 @@ Then run the app locally and open `http://127.0.0.1:3000/api/spotify/login`. The
 
 - Homepage copy and section composition live in `app/page.tsx` and the component files under `components/`.
 - Projects, blog metadata/article bodies, and shayari are stored in typed data files under `content/`.
-- Set `visible` in `content/projects.ts` to restore the temporarily hidden Bhasha-Token or Nexus Deep-Context RAG cards. `content/experience.ts` controls the temporarily hidden TransUnion timeline.
+- Set `visible` in `content/projects.ts` to restore the temporarily hidden Bhasha-Token or Nexus Deep-Context RAG cards. In `components/ExperienceTimeline.tsx`, each experience has its own `visible` flag; the orchestration entry is temporarily hidden while the other timeline entries remain available.
 - Homepage blog cards and the blog dashboard link directly to statically generated article routes. Each article includes related posts and a comments widget.
 - Images must be placed under `public/img/` and referenced with a root-relative path such as `/img/gallery-mountain-trail.jpeg`.
 

@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { showTransUnionExperience } from "@/content/experience";
 
 const experiences = [
   {
     number: "01",
+    visible: true,
     label: "DATA TRANSFORM MODERNIZATION & PRISM AI",
     title: "Modernizing financial data systems at enterprise scale.",
     content: (
@@ -18,6 +18,7 @@ const experiences = [
   },
   {
     number: "02",
+    visible: false,
     label: "AI-DRIVEN WORKSPACE ORCHESTRATION / ATLASSIAN ROVO",
     title: "Turning operational silos into an intelligent coordination layer.",
     content: (
@@ -30,6 +31,7 @@ const experiences = [
   },
   {
     number: "03",
+    visible: true,
     label: "INTERNAL ASSET TAGGING & RBAC DASHBOARD",
     title: "Replacing fragmented audits with a secure source of truth.",
     content: (
@@ -42,7 +44,7 @@ const experiences = [
 ];
 
 export default function ExperienceTimeline() {
-  if (!showTransUnionExperience) return null;
+  const visibleExperiences = experiences.filter((item) => item.visible);
 
   return (
     <section className="section timeline-section experience-timeline-section" id="experience">
@@ -51,7 +53,7 @@ export default function ExperienceTimeline() {
         <p>Three enterprise initiatives spanning data modernization, agentic orchestration, and secure internal platforms.</p>
       </div>
       <div className="experience-timeline">
-        {experiences.map((item, index) => (
+        {visibleExperiences.map((item, index) => (
           <motion.article
             className="experience-node"
             key={item.number}
