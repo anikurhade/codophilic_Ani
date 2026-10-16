@@ -42,19 +42,19 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
       <p className="eyebrow">{article.category} · {article.date} · {getArticleReadTime(article)} read</p>
       <h1>{article.title}</h1>
       <p className="article-intro">{article.intro}</p>
-      <article className="article-body prose prose-zinc dark:prose-invert max-w-none">
+      <article className="article-body prose prose-zinc dark:prose-invert max-w-3xl mx-auto px-6 sm:px-8">
         {article.sections.map((section, index) => (
           <section key={`${article.slug}-${index}`}>
             {"heading" in section && <h2>{section.heading}</h2>}
             {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             {"code" in section && section.code && (
-              <figure className="article-code">
+              <figure className="article-code w-full overflow-x-auto my-8">
                 <figcaption>{section.code.title} · {section.code.language}</figcaption>
                 <pre><code>{section.code.source}</code></pre>
               </figure>
             )}
             {"table" in section && section.table && (
-              <div className="article-table-wrap">
+              <div className="article-table-wrap w-full overflow-x-auto my-8">
                 <table className="article-table">
                   <thead><tr>{section.table.headers.map((header) => <th key={header} scope="col">{header}</th>)}</tr></thead>
                   <tbody>{section.table.rows.map((row) => <tr key={row[0]}>{row.map((cell) => <td key={cell}>{cell}</td>)}</tr>)}</tbody>
@@ -62,7 +62,7 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
               </div>
             )}
             {"image" in section && section.image && (
-              <figure className="article-figure">
+              <figure className="article-figure w-full overflow-x-auto my-8">
                 <Image
                   src={section.image.src}
                   alt={section.image.alt}

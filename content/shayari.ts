@@ -38,13 +38,13 @@ Main apne zakhm chhipate chhipate tera thikana bhool gaya`,
 
 export const galleryVerses = [
   {
-    title: "Raaste aur manzil",
-    text: "कभी-कभी,\nरास्ते मंज़िल से\nज़्यादा ज़रूरी होते हैं।",
-    translation: "Sometimes, the journey is more important than the destination.",
+    title: "जुन्नरची माती",
+    text: "जुन्नरच्या मातीने एवढंच शिकवलं —\nघाई नको, पाय घट्ट रोवून काम करत राहायचं.",
+    translation: "Junnar taught me this: no need to rush; keep your feet on the ground and keep doing the work.",
   },
   {
-    title: "Khud ek diya",
-    text: "रौशनी ढूँढने निकला था,\nखुद एक दिया बन गया।",
-    translation: "In searching for light, I became a lamp.",
+    title: "रात की शिफ्ट",
+    text: "देर रात अटका हुआ bug,\nसुबह तक थोड़ा कम अनजान था।\nसब्र रखा, एक-एक परत खोली —\nहल अक्सर वहीं मिला जहाँ से शुरुआत की थी।",
+    translation: "A bug that held me up late at night felt a little less unfamiliar by morning. I stayed patient, traced it layer by layer, and often found the answer where I had started.",
   },
 ] as const;
