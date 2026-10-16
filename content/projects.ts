@@ -13,8 +13,8 @@ export const projects = [
     status: "Project",
     visible: true,
     highlights: [],
-    href: "https://github.com/anikurhade/AttentionLens-Sandbox",
-    linkLabel: "GitHub repository (private)",
+    href: null,
+    linkLabel: null,
   },
   {
     slug: "corporate-ai-music-game",
