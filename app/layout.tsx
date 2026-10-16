@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
-import SpotifyWidget from "@/components/SpotifyWidget";
 import ThemeProvider from "@/components/ThemeProvider";
 import SideScrubber from "@/components/SideScrubber";
 
@@ -19,5 +18,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={`${inter.variable} ${mono.variable}`}><body className="overflow-x-hidden"><ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}><SmoothScroll>{children}</SmoothScroll><SpotifyWidget /><SideScrubber /></ThemeProvider></body></html>;
+  return <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={`${inter.variable} ${mono.variable}`}><body className="overflow-x-hidden"><ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}><SmoothScroll>{children}</SmoothScroll><SideScrubber /></ThemeProvider></body></html>;
 }
