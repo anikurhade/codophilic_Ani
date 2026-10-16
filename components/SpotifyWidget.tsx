@@ -60,6 +60,8 @@ export default function SpotifyWidget() {
     };
   }, []);
 
+  if (state.source === "offline" && state.title === fallbackState.title) return null;
+
   return (
     <aside className="spotify-widget" aria-label="Spotify now playing">
       {state.albumImageUrl ? (

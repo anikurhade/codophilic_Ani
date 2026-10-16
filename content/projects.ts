@@ -13,8 +13,8 @@ export const projects = [
     status: "Project",
     visible: true,
     highlights: [],
-    href: null,
-    linkLabel: null,
+    href: "/blog/inside-attentionlens",
+    linkLabel: "Architecture notes",
   },
   {
     slug: "corporate-ai-music-game",
@@ -30,15 +30,15 @@ export const projects = [
     status: "Concept",
     visible: true,
     highlights: [],
-    href: null,
-    linkLabel: null,
+    href: "/blog/designing-useful-ai",
+    linkLabel: "AI design notes",
   },
   {
     slug: "smart-carpool",
     title: "Smart Carpool Platform",
-    category: "MOBILITY / ROUTE OPTIMIZATION",
+    category: "JAVA / GRAPH ROUTING",
     description:
-      "A next-generation ride-sharing platform that composes journeys from compatible rides instead of limiting every trip to one driver and one destination.",
+      "A Java and Spring Boot mobility platform that uses time-expanded graph routing to compose compatible scheduled rides into practical multi-hop journeys.",
     metrics:
       "Flight-style multi-hop routing with transfers, verified-review trust signals, and privacy-first vehicle details.",
     details:
@@ -48,11 +48,11 @@ export const projects = [
       "Automated policy-based driver restrictions use genuine verified-review sentiment and verification signals.",
       "Privacy-first car details stay hidden until the rider completes verification.",
     ],
-    tech: ["Graph algorithms", "Time-dependent routing", "Trust & safety", "Privacy by design"],
+    tech: ["Java", "Spring Boot", "Time-Expanded Dijkstra / A*", "Trust & safety", "Privacy by design"],
     status: "In Progress",
     visible: true,
-    href: null,
-    linkLabel: null,
+    href: "/blog/multi-hop-carpool-routing",
+    linkLabel: "Routing architecture",
   },
   {
     slug: "bhasha-token",
@@ -100,7 +100,7 @@ export const projects = [
     status: "Project",
     visible: true,
     highlights: [],
-    href: null,
-    linkLabel: null,
+    href: "/blog/make-failure-legible",
+    linkLabel: "Diagnostics architecture",
   },
 ] as const;
