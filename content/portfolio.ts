@@ -2,7 +2,7 @@ export const portfolioProfile = {
   name: "Anirudha Kurhade",
   role: "Java, Spring Boot & Distributed Systems Engineer",
   summary:
-    "Anirudha builds Java and Spring Boot backends, distributed data pipelines, and Apache Spark/PySpark reconciliation systems. He applies custom AI tools to practical engineering bottlenecks rather than treating AI as a substitute for systems engineering.",
+    "I build Java and Spring Boot backends, distributed data pipelines, and Apache Spark/PySpark reconciliation systems. I apply custom AI tools to practical engineering bottlenecks rather than treating AI as a substitute for systems engineering.",
   migration:
     "Enterprise C-to-Java modernization and reconciliation involving more than 300 million financial records.",
   contact: {

@@ -14,8 +14,8 @@ type SpotifyState = {
 
 const fallbackState: SpotifyState = {
   isPlaying: false,
-  title: "Listening feed unavailable",
-  artist: "Spotify connection is not configured",
+  title: "Mohammed Rafi · Classic Vinyl & High-Focus Synth",
+  artist: "Late-night debugging & long-run soundtrack",
   albumImageUrl: null,
   songUrl: null,
   source: "offline",
@@ -60,6 +60,12 @@ export default function SpotifyWidget() {
     };
   }, []);
 
+  const playbackLabel = state.isPlaying
+    ? "NOW PLAYING"
+    : state.source === "offline" && state.title === fallbackState.title
+      ? "AUDIO TELEMETRY // CURATED ROTATION"
+      : "LAST PLAYED";
+
   return (
     <aside className="spotify-widget" aria-label="Spotify listening status">
       {state.albumImageUrl ? (
@@ -71,7 +77,7 @@ export default function SpotifyWidget() {
       )}
       <div className="spotify-copy">
         <span className="mono spotify-label">
-          <i className={state.isPlaying ? "spotify-live" : ""} /> {state.isPlaying ? "NOW PLAYING" : state.source === "offline" ? "MUSIC FEED OFFLINE" : "LAST PLAYED"}
+          <i className={state.isPlaying ? "spotify-live" : ""} /> {playbackLabel}
         </span>
         {state.songUrl ? <a href={state.songUrl} target="_blank" rel="noopener noreferrer"><strong>{state.title}</strong></a> : <strong>{state.title}</strong>}
         <small>{state.artist}</small>

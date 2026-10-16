@@ -1,10 +1,9 @@
 const skillGroups = [
-  ["Core Backend & JVM Engineering", ["Java", "Spring Boot", "Spring Security / RBAC", "Concurrency", "Microservices", "REST APIs", "System Design"]],
-  ["Distributed Data Engineering", ["Apache Spark", "PySpark", "Kafka", "Batch & Stream Processing", "Parquet", "Schema Reconciliation", "PostgreSQL"]],
+  ["Core Backend & JVM Engineering", ["Spring Boot", "Spring Security / RBAC", "Concurrency", "Microservices", "REST APIs", "System Design"]],
+  ["Distributed Data Engineering", ["Apache Spark", "PySpark", "Kafka", "Batch & Stream Processing", "Parquet", "Schema Reconciliation"]],
   ["Cloud & Production Infrastructure", ["AWS", "GCP", "Docker", "Kubernetes", "Jenkins", "Terraform", "Airflow", "CI/CD"]],
-  ["Applied AI & Custom Diagnostics", ["LLM Diagnostics", "RAG", "LangGraph", "Agentic Triage Workflows", "Vector Search", "AI Evaluation"]],
-  ["Programming Languages", ["Python", "Java", "SQL", "JavaScript", "TypeScript"]],
-  ["AI Frameworks", ["LangGraph", "LangChain", "CrewAI", "LlamaIndex", "Hugging Face", "OpenAI", "Gemini"]],
+  ["Applied AI & Custom Diagnostics", ["LLM Diagnostics", "RAG", "LangGraph", "LangChain", "CrewAI", "LlamaIndex", "Hugging Face", "OpenAI", "Gemini", "Agentic Triage Workflows", "Vector Search", "AI Evaluation"]],
+  ["Programming Languages", ["Java", "Python", "SQL", "TypeScript", "JavaScript"]],
   ["Databases & MLOps", ["PostgreSQL", "ChromaDB", "Vector Databases", "Model Serving"]],
 ] as const;
 

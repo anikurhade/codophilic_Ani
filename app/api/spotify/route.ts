@@ -37,8 +37,8 @@ function isRateLimited(request: Request) {
 function offlineResponse(status = 200) {
   return NextResponse.json({
     isPlaying: false,
-    title: "Listening feed unavailable",
-    artist: "Check Spotify connection settings",
+    title: "Mohammed Rafi · Classic Vinyl & High-Focus Synth",
+    artist: "Late-night debugging & long-run soundtrack",
     albumImageUrl: null,
     songUrl: null,
     source: "offline" satisfies PlaybackSource,
@@ -53,7 +53,7 @@ export async function GET(request: Request) {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
   const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
-  if (!clientId || !clientSecret || !refreshToken) return offlineResponse(503);
+  if (!clientId || !clientSecret || !refreshToken) return offlineResponse();
 
   const tokenResponse = await fetch(spotifyTokenUrl, {
     method: "POST",

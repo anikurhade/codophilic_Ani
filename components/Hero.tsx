@@ -63,7 +63,7 @@ export default function Hero() {
           <PromptChallengeTerminal />
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.55 }}>
             <a className="glass-cta primary" href="#work">View Architecture (Projects) <ArrowUpRight size={15} /></a>
-            <a className="glass-cta" href="/files/Anirudha Kurhade Resume.pdf" download>Download Resume (PDF) <ArrowUpRight size={15} /></a>
+            <a className="glass-cta" href="/files/Anirudha_Kurhade_Resume.pdf" download>Download Resume (PDF) <ArrowUpRight size={15} /></a>
             <a className="glass-cta" href="/blog">Read Logs (Blog) <ArrowUpRight size={15} /></a>
             <a className="glass-cta" href="#contact">Connect <ArrowUpRight size={15} /></a>
           </motion.div>

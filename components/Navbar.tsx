@@ -11,9 +11,9 @@ export default function Navbar() {
   return <header className="nav">
     <a className="logo" href="#top">AK<span>.</span></a>
     <nav>{links.map((link) => <a key={link} href={`#${link}`}>{link}</a>)}</nav>
-    <a className="nav-resume" href="/files/Anirudha Kurhade Resume.pdf" download>Resume PDF ↗</a>
+    <a className="nav-resume" href="/files/Anirudha_Kurhade_Resume.pdf" download>Resume PDF ↗</a>
     <button className="menu" onClick={() => setOpen(!open)} aria-label="Toggle menu">{open ? <X /> : <Menu />}</button>
     <ThemeEclipseToggle />
-    {open && <div className="drawer">{links.map((link) => <a key={link} onClick={() => setOpen(false)} href={`#${link}`}>{link}<span>↗</span></a>)}<a href="/files/Anirudha Kurhade Resume.pdf" download onClick={() => setOpen(false)}>Download Resume PDF<span>↗</span></a></div>}
+    {open && <div className="drawer">{links.map((link) => <a key={link} onClick={() => setOpen(false)} href={`#${link}`}>{link}<span>↗</span></a>)}<a href="/files/Anirudha_Kurhade_Resume.pdf" download onClick={() => setOpen(false)}>Download Resume PDF<span>↗</span></a></div>}
   </header>;
 }

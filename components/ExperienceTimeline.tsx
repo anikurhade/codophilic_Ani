@@ -10,7 +10,7 @@ export default function ExperienceTimeline() {
     <section className="section timeline-section experience-timeline-section" id="experience">
       <div className="section-head">
         <div><p className="eyebrow">03 / professional timeline</p><h2>TransUnion.<br /><em>Under the hood.</em></h2></div>
-        <p>Selected enterprise work across data modernization and secure internal platforms. An additional initiative is intentionally hidden for now.</p>
+        <p>Selected enterprise work across data modernization, agentic workflow orchestration, and secure internal platforms.</p>
       </div>
       <div className="experience-timeline">
         {visibleExperiences.map((item, index) => (
@@ -22,7 +22,7 @@ export default function ExperienceTimeline() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.65, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="experience-node-number mono">{item.number}</span>
+            <span className="experience-node-number mono">{String(index + 1).padStart(2, "0")}</span>
             <div className="experience-node-marker" aria-hidden="true" />
             <motion.div className="experience-node-card" initial={{ boxShadow: "0 0 0 rgba(249, 115, 22, 0)" }} whileInView={{ boxShadow: "0 0 28px rgba(249, 115, 22, 0.16)" }} viewport={{ once: true, amount: 0.45 }} transition={{ duration: 0.8 }}>
               <p className="mono experience-node-label">{item.label}</p>

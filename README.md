@@ -92,7 +92,7 @@ SPOTIFY_REFRESH_TOKEN=your-refresh-token
 SPOTIFY_REDIRECT_URI=http://127.0.0.1:3000/api/spotify/callback
 ```
 
-The refresh token is never exposed to the browser. The homepage footer signal bar shows the live track, most recent track, or an explicit offline state if Spotify credentials are not configured.
+The refresh token is never exposed to the browser. The homepage footer signal bar shows the live track or recent track; without credentials, it presents a curated Mohammed Rafi and high-focus synth listening status.
 
 For local authorization, register this exact URI in the Spotify Developer Dashboard:
 

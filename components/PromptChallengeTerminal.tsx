@@ -61,6 +61,6 @@ export default function PromptChallengeTerminal() {
       <AnimatePresence>{isUnlocked && <motion.div className="prompt-confetti" aria-hidden="true" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{Array.from({ length: 10 }, (_, index) => <i key={index} style={{ "--i": index } as React.CSSProperties} />)}</motion.div>}</AnimatePresence>
     </div>
     {!isUnlocked && <form className="prompt-form" onSubmit={submit}><span className="mono">$</span><input value={input} onChange={(event) => setInput(event.target.value)} aria-label="Mood authorization prompt" placeholder={mood.hint} /><button type="submit" aria-label="Submit prompt">↵</button></form>}
-    {isUnlocked && <motion.a className="prompt-resume-cta" href="/files/Anirudha Kurhade Resume.pdf" download initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>Download Resume.pdf ↗</motion.a>}
+    {isUnlocked && <motion.a className="prompt-resume-cta" href="/files/Anirudha_Kurhade_Resume.pdf" download initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>Download Resume.pdf ↗</motion.a>}
   </section>;
 }
