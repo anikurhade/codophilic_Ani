@@ -39,6 +39,22 @@ export const blogArticles = [
           "I keep returning to one question: does this make the next decision easier? If the answer is yes—and the system remains understandable when it is unsure—the model is doing useful work. If not, more autonomy will only make the wrong interaction happen faster.",
         ],
       },
+      {
+        heading: "Treat quality as a product loop",
+        paragraphs: [
+          "A useful evaluation set should come from real tasks, with permission and sensitive information removed. Include ordinary cases, ambiguous requests, missing sources, and situations where the correct action is to decline. Ask reviewers to score not only factual correctness but also whether the answer is traceable, appropriately scoped, and easy to correct.",
+          "Pair offline evaluation with product signals: how often suggestions are accepted unchanged, edited, dismissed, or followed by a clarification request. None of those signals is a perfect proxy for value, so interpret them together and review examples. A high acceptance rate can mean excellent assistance—or that the interface makes disagreement too difficult.",
+          "Finally, make iteration safe. Version prompts and retrieval settings, compare changes against a stable evaluation set, and roll out behind a feature flag where possible. That gives the team a way to learn without making every experiment a permanent behavior change for every user.",
+        ],
+      },
+      {
+        heading: "Make the safest useful action the default",
+        paragraphs: [
+          "The right amount of autonomy depends on reversibility and impact. Summarizing a document is easy to undo; changing access permissions is not. A useful design classifies actions by consequence, requires stronger confirmation for higher-impact changes, and records what happened so the user can understand and recover.",
+          "This is where interface design and system architecture meet. A clear preview is only trustworthy if the backend enforces the same scope the preview described. A good confirmation flow is backed by authorization checks, idempotent operations, audit records, and a way to report partial failure honestly.",
+          "AI feels helpful when it removes unnecessary effort without removing meaningful control. That is a narrower goal than “automate everything,” but it is also a much more dependable one.",
+        ],
+      },
     ],
   },
   {
@@ -80,6 +96,22 @@ export const blogArticles = [
           "The best modernization work leaves more than a new implementation. It leaves a map: documented invariants, representative test cases, known failure modes, and a safe way to compare old and new behavior.",
           "That map helps the next engineer move with confidence instead of rediscovering the same history under deadline pressure. The long way around is not valuable because it is long. It is valuable when the extra attention prevents us from mistaking speed for progress.",
           "That slower look is where better systems—and better ideas—usually begin.",
+        ],
+      },
+      {
+        heading: "Turn recovered knowledge into executable evidence",
+        paragraphs: [
+          "Once the behavior is understood, capture it where it can protect future changes. A small set of representative input-output fixtures can document edge cases better than a long prose description alone. Property tests can express invariants—such as stable ordering or a conservation rule—while integration tests verify that file formats and service boundaries still agree.",
+          "During a migration, compare old and new outputs on the same sanitized inputs. Differences are not automatically defects: some may be intentional corrections, while others may expose an assumption nobody had written down. Categorize them, ask the domain owner, and record the decision so the next comparison has context.",
+          "This is one reason migration tooling deserves the same care as production code. Reproducible inputs, deterministic runs, useful diff reports, and clear provenance make it possible to investigate a mismatch without guessing which version produced it.",
+        ],
+      },
+      {
+        heading: "Leave uncertainty visible",
+        paragraphs: [
+          "Not every behavior can be recovered before work begins. Some dependencies are unavailable, old data is incomplete, or a business rule has changed since the system was written. Label those unknowns explicitly and decide whether to block the migration, isolate the uncertainty, or proceed with a monitored assumption.",
+          "A clear record of uncertainty is not an admission of poor engineering. It is a way to prevent a guess from quietly becoming a permanent contract. The team can then revisit the assumption with evidence instead of rediscovering it through an incident.",
+          "Curiosity gives modernization its direction; tests and decision records give it a memory. Together they make the long way around a route toward safer change rather than an excuse to delay it.",
         ],
       },
     ],
@@ -131,6 +163,22 @@ export const blogArticles = [
           "I am building this as a mobility problem with a trust layer, not just a shortest-path demo. The algorithm can propose a clever route; the product still has to make that route understandable, feasible, and safe to accept. That is the real engineering challenge: turning a mathematically connected path into a journey a person can rely on.",
         ],
       },
+      {
+        heading: "Make the search practical at platform scale",
+        paragraphs: [
+          "A production search should narrow candidates before running an expensive route search. Spatial indexing can find rides near the origin, destination, and plausible transfer points. Time-window filters remove departures that cannot fit the rider's schedule. Only then does the graph search evaluate feasible continuations.",
+          "Search limits are product rules, not arbitrary algorithm shortcuts. A maximum number of transfers, a bound on total detour, and a reasonable horizon keep results understandable and prevent a combinatorial explosion. The interface should say when a route was excluded because of a constraint rather than imply that no route exists in the whole network.",
+          "The system also needs to cope with change. A ride may be cancelled, a seat may be taken, or a driver may alter a stop. Keep route suggestions versioned against their underlying ride data, revalidate before booking, and make a changed itinerary go through a fresh confirmation rather than silently swapping a transfer.",
+        ],
+      },
+      {
+        heading: "Trust and privacy belong in the route model",
+        paragraphs: [
+          "A mathematically short path is not necessarily an acceptable trip. Transfer points need to be practical meeting places, wait times should avoid unsafe or unreasonable gaps, and each segment must satisfy the rider's accessibility and preference constraints. These constraints need to be explicit inputs, not hidden penalties that make the route difficult to explain.",
+          "Trust signals require equally careful handling. Verified reviews can contribute evidence about reliability, but sentiment analysis is noisy and can encode sarcasm, language differences, or coordinated abuse. It should be combined with verification and policy rules, and severe restrictions need human review, an auditable reason, and a way to appeal.",
+          "Privacy-first vehicle details reduce unnecessary exposure before a match is meaningful. The platform should reveal only what a verified rider needs at the right stage, while retaining the minimum operational information required to handle safety reports. Privacy is a staged disclosure design, not a promise that the system stores no sensitive information.",
+        ],
+      },
     ],
   },
   {
@@ -170,6 +218,22 @@ export const blogArticles = [
           "An attention weight is evidence about one computation in one layer and head; it is not, by itself, a complete explanation of why a model answered as it did. Treating a bright cell as a definitive explanation would overstate what the display can show.",
           "AttentionLens is most useful as an exploratory instrument: a way to ask sharper questions, compare patterns, and build intuition about model structure. A useful interface keeps the input, tokenization, selected head, and output view connected, and helps users move from “this cell is bright” to “what changes when I compare another head or input?”",
           "The goal is not to make a Transformer look magical—or to claim a heatmap makes it fully transparent. It is to make one important mechanism less opaque. When people can inspect the pieces, they can form better questions about the whole.",
+        ],
+      },
+      {
+        heading: "Build a visualization that stays faithful to the model",
+        paragraphs: [
+          "The hardest implementation detail is often alignment. Tokenizers may add special tokens, split a visible word into several pieces, or return offsets that need careful mapping back to the original string. The display should preserve that mapping and make special tokens legible rather than hiding them in a way that changes the apparent sequence.",
+          "Attention values also need correct context. A causal mask prevents a decoder position from attending to future positions; padding masks suppress positions that do not represent input. If the interface omits a mask or mixes heads and layers, its matrix can look convincing while describing the wrong computation.",
+          "Performance affects interpretation too. Large heatmaps become difficult to read and expensive to render. A responsive interface can virtualize token labels, limit the visible sequence length with a clear notice, and let the user inspect one layer and head at a time instead of rendering every tensor simultaneously.",
+        ],
+      },
+      {
+        heading: "The impact is better questions, not a magic explanation",
+        paragraphs: [
+          "A strong learning interaction begins with a question: what changes when a negation is introduced, when a name is moved, or when a different head is selected? Comparing controlled inputs helps learners notice patterns without mistaking coincidence for a rule.",
+          "A useful next step is to pair attention inspection with other evidence—such as ablation experiments or feature-level analysis—while keeping each method's limits explicit. The interface can encourage those follow-up questions, but it should not collapse distinct interpretability methods into one authoritative score.",
+          "AttentionLens is valuable when it helps a student or engineer move from passive curiosity to a testable hypothesis. The display is a window into selected operations, not a complete map of model cognition. That distinction makes the project more credible, not less ambitious.",
         ],
       },
     ],
@@ -213,6 +277,22 @@ export const blogArticles = [
           "Success is not the number of automations. It is whether people can quickly answer what happens next, who owns it, what is blocked, and which plan is current. Jira captures execution, Confluence preserves shared understanding, and Rovo reduces the effort of finding and connecting that understanding. Together, they can form a practical coordination layer for complex events.",
         ],
       },
+      {
+        heading: "Orchestrate the event lifecycle, not just the launch",
+        paragraphs: [
+          "A useful workflow follows the event from intake through closeout. During planning, the team confirms scope, owners, dependencies, and decision deadlines. During preparation, task status and open risks can feed a concise readiness review. On event day, a runbook should prioritize operational facts—contacts, timings, escalation paths, and fallback plans—over generated prose.",
+          "After the event, attendance, feedback, incident notes, and budget reconciliation can be gathered into a retrospective. Rovo may help summarize themes, but the team should preserve source links and distinguish participant feedback from an agent's interpretation. Follow-up actions should be reviewed and assigned deliberately.",
+          "This lifecycle view prevents a common automation trap: optimizing the kickoff while leaving handoffs and closeout manual. The event is only complete when commitments are tracked and reusable learning is captured in a place the next team can find.",
+        ],
+      },
+      {
+        heading: "Design signals and fallbacks before automating",
+        paragraphs: [
+          "A useful alert has an owner, a deadline, and a next action. “Task overdue” is a weak signal if nobody knows whether it threatens the venue booking or merely a draft agenda. Connect critical tasks to explicit dependencies and escalate only when a meaningful threshold is crossed.",
+          "Every integration needs a fallback. If a Jira automation fails, the task must remain visible and a human should be able to continue the workflow. If Rovo cannot access a source, the answer should say so and link to the approved location rather than inventing a summary.",
+          "Finally, review permissions and retention. Event plans can include attendee information, vendor terms, and internal decisions. Connect only the knowledge spaces the workflow needs, avoid copying personal data into broad channels, and decide how long operational records should remain available.",
+        ],
+      },
     ],
   },
   {
@@ -252,6 +332,22 @@ export const blogArticles = [
         paragraphs: [
           "Fluent language can make weak evidence sound settled. A reliable AI feature needs explicit boundaries: what it can access, which actions it may take, when approval is required, and what it does when sources disagree. It should be able to say, “I could not verify this,” and leave the user with a safe next step.",
           "The quiet contract of a system is not that nothing will fail. It is that failure will not masquerade as success. Make boundaries clear, state inspectable, and recovery truthful. That is how software earns trust—not by pretending to be infallible, but by being understandable when it is not.",
+        ],
+      },
+      {
+        heading: "Make recovery part of the original design",
+        paragraphs: [
+          "A recovery path should be designed alongside the happy path. For a retryable operation, explain whether retrying is safe and ensure the operation is idempotent. For a partial result, state which parts completed and which did not. For an irreversible action, provide a preview and an explicit confirmation before the system crosses the boundary.",
+          "These details are not merely interface polish. They influence API contracts, persistence, job orchestration, and auditability. A system that records a request identifier and state transition can tell whether a retry is resuming work or creating a duplicate. A system that records only a final boolean cannot.",
+          "Recovery should also be proportionate. If a recommendation was uncertain, invite verification; do not force a full restart. If a workflow cannot continue safely, preserve the evidence and give a clear escalation route instead of hiding the failed state.",
+        ],
+      },
+      {
+        heading: "Observe what people experience",
+        paragraphs: [
+          "Operational dashboards tend to report service-level facts: latency, errors, queue depth, and availability. Those are necessary, but product reliability also needs measures such as stale-result rate, duplicate-action rate, user correction frequency, and time to recover from a failed workflow.",
+          "These measures need context and privacy protections. Aggregate where possible, avoid logging secrets or unnecessary personal content, and retain enough structured identifiers to trace a failure without turning observability into a second database of sensitive information.",
+          "A dependable system does not claim that every response is certain or every dependency is healthy. It makes the limits visible, records what actually happened, and offers a recovery path that matches reality.",
         ],
       },
     ],
