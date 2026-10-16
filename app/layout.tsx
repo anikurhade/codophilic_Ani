@@ -12,8 +12,10 @@ const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 export const metadata: Metadata = {
   title: "Anirudha Kurhade — Backend Architect & AI Engineer",
   description: "Anirudha Kurhade is a Software Development Engineer specializing in Generative AI, robust data pipelines, and scalable backend architecture.",
-  metadataBase: new URL("https://anikurhade.github.io/codophilic_Ani/"),
-  openGraph: { title: "Anirudha Kurhade — Backend Architect & AI Engineer", description: "Software Development Engineer building intelligent systems and scalable backend platforms.", type: "website" },
+  metadataBase: new URL("https://anirudhakurhade.vercel.app"),
+  alternates: { canonical: "/" },
+  openGraph: { title: "Anirudha Kurhade — Backend Architect & AI Engineer", description: "Software Development Engineer building intelligent systems and scalable backend platforms.", type: "website", url: "/" },
+  twitter: { card: "summary_large_image", title: "Anirudha Kurhade — Backend Architect & AI Engineer", description: "Software Development Engineer building intelligent systems and scalable backend platforms." },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

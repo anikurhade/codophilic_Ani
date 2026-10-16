@@ -1,8 +1,29 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BlogComments from "@/components/BlogComments";
 import { blogArticles, getArticleReadTime } from "@/content/blogs";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const article = blogArticles.find((item) => item.slug === slug);
+  if (!article) return { title: "Article not found" };
+
+  const image = article.sections.find((section) => "image" in section)?.image;
+  return {
+    title: `${article.title} | Anirudha Kurhade`,
+    description: article.excerpt,
+    alternates: { canonical: `/blog/${article.slug}` },
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      type: "article",
+      ...(image ? { images: [{ url: image.src, alt: image.alt }] } : {}),
+    },
+    twitter: { card: "summary_large_image", title: article.title, description: article.excerpt },
+  };
+}
 
 export function generateStaticParams() {
   return blogArticles.map(({ slug }) => ({ slug }));
