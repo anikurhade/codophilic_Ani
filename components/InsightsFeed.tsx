@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";
-import { blogArticles } from "@/content/blogs";
+import { blogArticles, getArticleReadTime } from "@/content/blogs";
 import { verses } from "@/content/shayari";
 
 export default function InsightsFeed() {
@@ -18,7 +18,7 @@ export default function InsightsFeed() {
       <motion.div key={tab} className="medium-grid" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: .25 }}>
         {tab === "systems"
           ? posts.map((post) => <Link className="medium-card" href={`/blog/${post.slug}`} key={post.slug}>
-            <div className="medium-overlay" /><div className="medium-meta mono"><span>{post.category}</span><span>{post.readTime}</span></div>
+            <div className="medium-overlay" /><div className="medium-meta mono"><span>{post.category}</span><span>{getArticleReadTime(post)} read</span></div>
             <h3>{post.title}</h3><p>{post.excerpt}</p><span className="accent">Read article ↗</span>
           </Link>)
           : verses.map((verse) => <article className="medium-card verse-card" key={verse.title}>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">A legible system failure contract</title>
+  <desc id="desc">A request crosses an explicit contract into observable states; when it fails, the system reports the state and offers a safe recovery path.</desc>
+  <rect width="960" height="480" rx="24" fill="#111113"/>
+  <g fill="#18181b" stroke="#f97316" stroke-width="2">
+    <rect x="60" y="175" width="190" height="130" rx="14"/>
+    <rect x="300" y="175" width="190" height="130" rx="14"/>
+    <rect x="540" y="175" width="170" height="130" rx="14"/>
+    <rect x="760" y="175" width="150" height="130" rx="14"/>
+  </g>
+  <g fill="#f4f4f5" font-family="Arial,sans-serif" text-anchor="middle">
+    <text x="155" y="220" font-size="17" font-weight="700">REQUEST</text><text x="155" y="251" fill="#a1a1aa" font-size="14">Stable identity</text>
+    <text x="395" y="220" font-size="17" font-weight="700">CONTRACT</text><text x="395" y="251" fill="#a1a1aa" font-size="14">Explicit states</text>
+    <text x="625" y="220" font-size="17" font-weight="700">OBSERVE</text><text x="625" y="251" fill="#a1a1aa" font-size="14">Report truth</text>
+    <text x="835" y="220" font-size="17" font-weight="700">RECOVER</text><text x="835" y="251" fill="#a1a1aa" font-size="14">Safe next step</text>
+  </g>
+  <g fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"><path d="M260 240h28M500 240h28M720 240h28"/></g>
+  <text x="480" y="92" fill="#f97316" font-family="Arial,sans-serif" font-size="17" letter-spacing="3" text-anchor="middle">FAILURE SHOULD NEVER LOOK LIKE SUCCESS</text>
+</svg>

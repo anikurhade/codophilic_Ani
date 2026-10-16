@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">Modernization as translation</title>
+  <desc id="desc">Legacy behavior is observed and tested before it is translated into a modern system.</desc>
+  <rect width="960" height="480" rx="24" fill="#111113"/>
+  <g fill="#18181b" stroke="#f97316" stroke-width="2">
+    <rect x="70" y="175" width="220" height="130" rx="14"/>
+    <rect x="370" y="175" width="220" height="130" rx="14"/>
+    <rect x="670" y="175" width="220" height="130" rx="14"/>
+  </g>
+  <g fill="#f4f4f5" font-family="Arial,sans-serif" text-anchor="middle">
+    <text x="180" y="220" font-size="19" font-weight="700">LEGACY SYSTEM</text>
+    <text x="180" y="252" fill="#a1a1aa" font-size="15">Behavior + history</text>
+    <text x="480" y="220" font-size="19" font-weight="700">DOCUMENT + TEST</text>
+    <text x="480" y="252" fill="#a1a1aa" font-size="15">Recover the contract</text>
+    <text x="780" y="220" font-size="19" font-weight="700">MODERN SYSTEM</text>
+    <text x="780" y="252" fill="#a1a1aa" font-size="15">Safer change</text>
+  </g>
+  <g fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M305 240h47m-15-15 15 15-15 15M605 240h47m-15-15 15 15-15 15"/>
+  </g>
+  <text x="480" y="90" fill="#f97316" font-family="Arial,sans-serif" font-size="17" letter-spacing="3" text-anchor="middle">PRESERVE WHAT MATTERS. MAKE ROOM FOR CHANGE.</text>
+</svg>

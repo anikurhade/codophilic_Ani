@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">A grounded AI handoff</title>
+  <desc id="desc">Context and sources flow into an AI suggestion, then a person reviews and decides.</desc>
+  <rect width="960" height="480" rx="24" fill="#111113"/>
+  <g fill="#18181b" stroke="#f97316" stroke-width="2">
+    <rect x="60" y="174" width="210" height="132" rx="14"/>
+    <rect x="375" y="174" width="210" height="132" rx="14"/>
+    <rect x="690" y="174" width="210" height="132" rx="14"/>
+  </g>
+  <g fill="#f4f4f5" font-family="Arial,sans-serif" text-anchor="middle">
+    <text x="165" y="218" font-size="18" font-weight="700">CONTEXT + SOURCES</text>
+    <text x="165" y="250" fill="#a1a1aa" font-size="15">Verified information</text>
+    <text x="480" y="218" font-size="18" font-weight="700">AI SUGGESTION</text>
+    <text x="480" y="250" fill="#a1a1aa" font-size="15">Evidence + uncertainty</text>
+    <text x="795" y="218" font-size="18" font-weight="700">HUMAN DECISION</text>
+    <text x="795" y="250" fill="#a1a1aa" font-size="15">Review before action</text>
+  </g>
+  <g fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M285 240h67m-15-15 15 15-15 15M600 240h67m-15-15 15 15-15 15"/>
+  </g>
+  <text x="480" y="90" fill="#f97316" font-family="Arial,sans-serif" font-size="17" letter-spacing="3" text-anchor="middle">A USEFUL ASSISTANT MAKES THE HANDOFF VISIBLE</text>
+</svg>

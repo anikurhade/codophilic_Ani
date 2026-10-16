@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">AttentionLens model inspection flow</title>
+  <desc id="desc">Input tokens produce query, key, and value projections, which are inspected through a token-to-token attention heatmap.</desc>
+  <rect width="960" height="480" rx="24" fill="#111113"/>
+  <g fill="#18181b" stroke="#f97316" stroke-width="2">
+    <rect x="55" y="170" width="180" height="140" rx="12"/>
+    <rect x="290" y="170" width="250" height="140" rx="12"/>
+    <rect x="595" y="145" width="310" height="190" rx="12"/>
+  </g>
+  <g fill="#f4f4f5" font-family="Arial,sans-serif" text-anchor="middle">
+    <text x="145" y="215" font-size="18" font-weight="700">INPUT TOKENS</text>
+    <text x="145" y="249" fill="#a1a1aa" font-size="15">IDs + positions</text>
+    <text x="415" y="205" font-size="18" font-weight="700">PROJECTIONS</text>
+    <text x="415" y="241" fill="#fbbf24" font-size="16">Query · Key · Value</text>
+    <text x="750" y="185" font-size="18" font-weight="700">ATTENTION WEIGHTS</text>
+    <text x="750" y="310" fill="#a1a1aa" font-size="14">Inspectable, not a full explanation</text>
+  </g>
+  <g fill="#f97316">
+    <rect x="680" y="215" width="34" height="24" rx="3" opacity=".25"/><rect x="720" y="215" width="34" height="24" rx="3" opacity=".65"/><rect x="760" y="215" width="34" height="24" rx="3" opacity=".4"/><rect x="800" y="215" width="34" height="24" rx="3" opacity=".8"/>
+    <rect x="680" y="245" width="34" height="24" rx="3" opacity=".7"/><rect x="720" y="245" width="34" height="24" rx="3" opacity=".3"/><rect x="760" y="245" width="34" height="24" rx="3" opacity=".9"/><rect x="800" y="245" width="34" height="24" rx="3" opacity=".35"/>
+  </g>
+  <g fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"><path d="M250 240h28M550 240h34"/></g>
+</svg>

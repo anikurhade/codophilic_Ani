@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">Multi-hop carpool route</title>
+  <desc id="desc">A rider travels from an origin to a transfer point on one scheduled ride, waits through a transfer buffer, then continues to the destination on a second ride.</desc>
+  <rect width="960" height="480" rx="24" fill="#111113"/>
+  <text x="480" y="86" fill="#f97316" font-family="Arial,sans-serif" font-size="17" letter-spacing="3" text-anchor="middle">ROUTE FEASIBILITY = LOCATION + TIME</text>
+  <path d="M150 240h660" fill="none" stroke="#3f3f46" stroke-width="8" stroke-linecap="round"/>
+  <path d="M150 240h305" fill="none" stroke="#f97316" stroke-width="8" stroke-linecap="round"/>
+  <path d="M505 240h305" fill="none" stroke="#fbbf24" stroke-width="8" stroke-linecap="round" stroke-dasharray="12 12"/>
+  <g fill="#18181b" stroke="#f97316" stroke-width="4">
+    <circle cx="150" cy="240" r="23"/><circle cx="480" cy="240" r="23"/><circle cx="810" cy="240" r="23"/>
+  </g>
+  <g fill="#f4f4f5" font-family="Arial,sans-serif" text-anchor="middle">
+    <text x="150" y="302" font-size="18" font-weight="700">ORIGIN</text>
+    <text x="480" y="302" font-size="18" font-weight="700">TRANSFER</text>
+    <text x="810" y="302" font-size="18" font-weight="700">DESTINATION</text>
+    <text x="310" y="205" fill="#f97316" font-size="15">RIDE A · ARRIVES 10:20</text>
+    <text x="650" y="205" fill="#fbbf24" font-size="15">RIDE B · DEPARTS 10:40</text>
+    <text x="480" y="364" fill="#a1a1aa" font-size="15">20-minute transfer buffer</text>
+  </g>
+</svg>

@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import BlogComments from "@/components/BlogComments";
-import { blogArticles } from "@/content/blogs";
+import { blogArticles, getArticleReadTime } from "@/content/blogs";
 
 export function generateStaticParams() {
   return blogArticles.map(({ slug }) => ({ slug }));
@@ -17,7 +18,7 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
   return (
     <main className="article-page">
       <Link className="blog-back mono" href="/blog">← All notes</Link>
-      <p className="eyebrow">{article.category} · {article.date} · {article.readTime}</p>
+      <p className="eyebrow">{article.category} · {article.date} · {getArticleReadTime(article)} read</p>
       <h1>{article.title}</h1>
       <p className="article-intro">{article.intro}</p>
       <article className="article-body prose prose-zinc dark:prose-invert max-w-none">
@@ -25,6 +26,18 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
           <section key={`${article.slug}-${index}`}>
             {"heading" in section && <h2>{section.heading}</h2>}
             {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            {"image" in section && section.image && (
+              <figure className="article-figure">
+                <Image
+                  src={section.image.src}
+                  alt={section.image.alt}
+                  width={section.image.width}
+                  height={section.image.height}
+                  sizes="(max-width: 760px) 100vw, 68ch"
+                />
+                <figcaption>{section.image.caption}</figcaption>
+              </figure>
+            )}
           </section>
         ))}
       </article>
@@ -39,7 +52,7 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
         <div className="more-articles-grid">
           {moreArticles.map((item) => (
             <Link className="post-card" href={`/blog/${item.slug}`} key={item.slug}>
-              <span className="mono">{item.category} · {item.readTime}</span>
+              <span className="mono">{item.category} · {getArticleReadTime(item)} read</span>
               <h3>{item.title}</h3>
               <p>{item.excerpt}</p>
               <span className="accent">Read article ↗</span>

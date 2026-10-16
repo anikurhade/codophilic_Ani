@@ -8,13 +8,35 @@ export const blogArticles = [
       "A practical note on building agentic interfaces that feel clear, grounded, and human.",
     intro:
       "The most useful AI products are not the ones that say the most. They are the ones that create confidence at the right moment.",
-    readTime: "3 min",
     sections: [
       {
+        heading: "Start with the moment that needs help",
         paragraphs: [
           "Agentic systems make it tempting to automate everything. A better starting point is to map the moments where people lose context, repeat a decision, or need a small amount of synthesis.",
-          "In practice, that means designing clear handoffs, showing the source behind an answer, and making uncertainty visible. The interface should feel like a collaborator, not a black box.",
-          "I keep returning to one simple question: does this make the next decision easier? If the answer is yes, the model is doing useful work.",
+          "Imagine an analyst reviewing a long incident thread. The useful intervention may be a concise timeline and a list of unresolved decisions—not an agent that silently changes the ticket, emails stakeholders, and declares the incident resolved. Start by finding the repeated cognitive work, then decide what the system can safely prepare.",
+          "A practical design exercise is to write down the user's goal, the evidence available to the model, the action the model may take, and the moment a person must confirm. If those boundaries are hard to explain, the feature is probably trying to do too much.",
+        ],
+        image: {
+          src: "/img/blog/ai-handoff.svg",
+          alt: "A flow diagram showing an AI assistant gathering context, preparing a grounded suggestion, and handing the decision to a person.",
+          caption: "A useful assistant makes the handoff—and the evidence behind it—visible.",
+          width: 960,
+          height: 480,
+        },
+      },
+      {
+        heading: "Design the handoff, not just the answer",
+        paragraphs: [
+          "A helpful answer is only one part of an interaction. People need to understand where it came from, what assumptions it made, and what to do next. Showing the source beside a summary makes verification cheaper. Showing uncertainty gives a person permission to slow down when the evidence is incomplete.",
+          "The interface should also make the boundary between preparation and action unmistakable. Drafting a Jira ticket is different from assigning it. Suggesting a reply is different from sending it. A confirmation step should summarize the intended action and its consequences, not merely ask “Are you sure?”",
+          "When a system cannot find enough evidence, the right response is not a plausible completion. It is an explicit gap: what could not be verified, what source was missing, and how the person can proceed safely.",
+        ],
+      },
+      {
+        heading: "Measure whether the next decision got easier",
+        paragraphs: [
+          "Model accuracy matters, but it is not the whole product outcome. Measure whether users spend less time reconstructing context, whether they can verify an answer, how often they correct a generated draft, and whether an automation creates extra review work.",
+          "I keep returning to one question: does this make the next decision easier? If the answer is yes—and the system remains understandable when it is unsure—the model is doing useful work. If not, more autonomy will only make the wrong interaction happen faster.",
         ],
       },
     ],
@@ -28,13 +50,36 @@ export const blogArticles = [
       "What legacy systems taught me about patience, craft, and asking better questions.",
     intro:
       "Legacy systems taught me that good engineering is often less about speed and more about leaving the next person a clearer path.",
-    readTime: "3 min",
     sections: [
       {
+        heading: "Modernization is translation",
         paragraphs: [
-          "Modernization is not a demolition job. It is translation: understanding why something exists, preserving what matters, and creating room for a safer future.",
-          "The same principle applies outside code. Curiosity slows us down just enough to notice the assumptions underneath a decision.",
-          "That slower look is where better systems — and better ideas — usually begin.",
+          "Modernization is not a demolition job. It is translation: understanding why something exists, preserving what matters, and creating room for a safer future. A legacy rule may look awkward in isolation because the business constraint that shaped it lives somewhere else—in an old incident report, a downstream file format, or a promise made to a customer.",
+          "Replacing the code before recovering that context can make a system cleaner and less correct at the same time. The first task is therefore not to rewrite. It is to find the contract: what enters the system, what must remain true, and which edge cases people quietly rely on.",
+          "That work can feel slower than opening an editor, but it changes the quality of every decision that follows. A migration plan grounded in evidence can separate essential behavior from accidental complexity instead of carrying both forward blindly.",
+        ],
+        image: {
+          src: "/img/blog/legacy-translation.svg",
+          alt: "A diagram showing legacy behavior being documented, validated, and translated into a safer modern system.",
+          caption: "Good modernization carries verified behavior forward while making room for change.",
+          width: 960,
+          height: 480,
+        },
+      },
+      {
+        heading: "Curiosity is an engineering tool",
+        paragraphs: [
+          "Curiosity is often treated as a personality trait, but in engineering it is a method. Ask why a field is nullable. Ask which team consumes an export. Ask what happens when a batch is replayed. Each question tests an assumption before it becomes a production defect.",
+          "The same habit applies outside code. When a decision seems obvious, curiosity slows us down just enough to notice what we may have left out. It makes room for a second explanation and a better question.",
+          "This does not mean analysis should continue forever. A useful investigation has a boundary: gather enough evidence to make a reversible decision, record what remains uncertain, and learn from the result. The goal is not perfect certainty; it is a clearer next step.",
+        ],
+      },
+      {
+        heading: "Leave a clearer path",
+        paragraphs: [
+          "The best modernization work leaves more than a new implementation. It leaves a map: documented invariants, representative test cases, known failure modes, and a safe way to compare old and new behavior.",
+          "That map helps the next engineer move with confidence instead of rediscovering the same history under deadline pressure. The long way around is not valuable because it is long. It is valuable when the extra attention prevents us from mistaking speed for progress.",
+          "That slower look is where better systems—and better ideas—usually begin.",
         ],
       },
     ],
@@ -49,7 +94,6 @@ export const blogArticles = [
       "A flight itinerary is a constrained path through time. The same idea can connect several carpools into one understandable journey.",
     intro:
       "Flight search looks simple from the outside: choose two cities, choose a date, and compare itineraries. Underneath, it is a constrained path-finding problem—and that makes it a useful model for multi-hop carpooling.",
-    readTime: "8 min",
     sections: [
       {
         heading: "A journey is more than connected places",
@@ -57,6 +101,13 @@ export const blogArticles = [
           "Each flight is an edge with a departure time, arrival time, capacity, and rules about which connection can follow it. A connection is useful only if the passenger can make it. I approached multi-hop carpool routing with the same mental model.",
           "A ride is a scheduled segment with pickup and drop-off points, time windows, available seats, and a maximum acceptable detour. A rider's journey can be assembled from several segments, provided each handoff is feasible.",
         ],
+        image: {
+          src: "/img/blog/multi-hop-routing.svg",
+          alt: "A route diagram connecting an origin to a destination through two scheduled rides and a transfer buffer.",
+          caption: "A route is valid only when each transfer works in both space and time.",
+          width: 960,
+          height: 480,
+        },
       },
       {
         heading: "Representing time in the graph",
@@ -91,7 +142,6 @@ export const blogArticles = [
       "How an interactive view of tokens, attention heads, and QKV transformations can make Transformer mechanics easier to explore.",
     intro:
       "Transformers can be described with equations, but equations alone do not always help a learner build intuition. AttentionLens is an interactive project that makes one part of that machinery visible: how token representations interact through self-attention.",
-    readTime: "7 min",
     sections: [
       {
         heading: "Start with the text the model actually sees",
@@ -106,6 +156,13 @@ export const blogArticles = [
           "A heatmap can make relationships inspectable: rows and columns correspond to token positions, and cell intensity reflects an attention weight. But a heatmap is easy to render and easy to misread. Users need to know which layer and head they are viewing, whether a causal mask is in effect, and how token positions map to the input.",
           "Showing QKV transformations alongside attention weights helps bridge abstract operations and visible patterns. The project combines a Python/model-oriented stack with an interactive visualization layer, including PyTorch, Hugging Face Transformers, and React Three Fiber.",
         ],
+        image: {
+          src: "/img/blog/attentionlens.svg",
+          alt: "A Transformer inspection diagram connecting input tokens to query, key, and value projections and an attention heatmap.",
+          caption: "AttentionLens links token positions and model operations to an inspectable view.",
+          width: 960,
+          height: 480,
+        },
       },
       {
         heading: "Interpretability needs honest boundaries",
@@ -126,7 +183,6 @@ export const blogArticles = [
       "A practical coordination model combining Jira execution, Confluence context, and Atlassian Rovo AI assistance.",
     intro:
       "A complex event is a project disguised as a date on a calendar. Jira, Confluence, and Atlassian Rovo can work together as a coordination system—if each has a clear role and AI suggestions stay grounded in evidence.",
-    readTime: "7 min",
     sections: [
       {
         heading: "Give every tool a clear job",
@@ -141,6 +197,13 @@ export const blogArticles = [
           "After review, the plan can become Jira work for logistics, speakers, communications, registration, technology, and day-of operations. Dependencies become visible. A late venue confirmation can be shown as a risk to downstream work instead of being buried in meeting notes.",
           "Confluence remains the place where the team reads the current runbook; Jira remains the place where owners update work. Predictable transitions can trigger checklists, due-date reminders, or approval requests. Rovo can help answer “What is still blocked?” or “Which decisions changed?”—provided records are current and access rules are respected.",
         ],
+        image: {
+          src: "/img/blog/event-orchestration.svg",
+          alt: "A workflow diagram connecting an event brief in Confluence to Jira tasks and Rovo-assisted discovery and summaries.",
+          caption: "A coordination system works when context, ownership, and assistance stay connected.",
+          width: 960,
+          height: 480,
+        },
       },
       {
         heading: "Keep humans accountable for consequential actions",
@@ -161,7 +224,6 @@ export const blogArticles = [
       "Reliability is not the promise that nothing fails; it is the promise that failure will not masquerade as success.",
     intro:
       "A system makes promises even when no one writes them down. The hardest failures are often not crashes, but broken promises that still produce a green checkmark.",
-    readTime: "6 min",
     sections: [
       {
         heading: "Define the contract at every boundary",
@@ -177,6 +239,13 @@ export const blogArticles = [
           "Retries need stable request identifiers so a repeated request can be recognized rather than performed twice. Idempotency is not just an optimization; it makes retries safe.",
           "Observability helps engineers investigate through logs, metrics, and traces. Products also need user-facing observability: clear progress, visible uncertainty, and recovery choices that reflect the actual state.",
         ],
+        image: {
+          src: "/img/blog/failure-contract.svg",
+          alt: "A system flow showing an explicit contract, observable states, and a safe recovery path when an operation fails.",
+          caption: "Reliable systems make failure legible and recovery safe.",
+          width: 960,
+          height: 480,
+        },
       },
       {
         heading: "AI must be allowed to say what it cannot verify",
@@ -188,3 +257,18 @@ export const blogArticles = [
     ],
   },
 ] as const;
+
+type BlogArticle = (typeof blogArticles)[number];
+
+export function getArticleReadTime(article: BlogArticle) {
+  const words = [
+    article.title,
+    article.intro,
+    ...article.sections.flatMap((section) => [
+      "heading" in section ? section.heading : "",
+      ...section.paragraphs,
+    ]),
+  ].join(" ").trim().split(/\s+/).filter(Boolean).length;
+
+  return `${Math.max(1, Math.ceil(words / 220))} min`;
+}

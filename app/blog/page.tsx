@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { blogArticles } from "@/content/blogs";
+import { blogArticles, getArticleReadTime } from "@/content/blogs";
 
 export default function BlogIndex() {
   return (
@@ -10,7 +10,7 @@ export default function BlogIndex() {
       <div className="post-list prose prose-zinc dark:prose-invert max-w-none">
         {blogArticles.map((post) => (
           <Link className="post-card" href={`/blog/${post.slug}`} key={post.slug}>
-            <span className="mono">{post.category} · {post.date} · {post.readTime}</span>
+            <span className="mono">{post.category} · {post.date} · {getArticleReadTime(post)} read</span>
             <h2>{post.title}</h2>
             <p>{post.excerpt}</p>
             <span className="accent">Read article ↗</span>
