@@ -81,7 +81,7 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
               />
             )}
             {"table" in section && section.table && (
-              <div className="article-table-wrap w-full overflow-x-auto my-8">
+              <div className="article-table-wrap w-full overflow-x-auto my-6">
                 <table className="article-table">
                   <thead><tr>{section.table.headers.map((header) => <th key={header} scope="col">{header}</th>)}</tr></thead>
                   <tbody>{section.table.rows.map((row) => <tr key={row[0]}>{row.map((cell) => <td key={cell}>{cell}</td>)}</tr>)}</tbody>
@@ -89,7 +89,7 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
               </div>
             )}
             {"image" in section && section.image && (
-              <figure className="article-figure w-full overflow-x-auto my-8">
+              <figure className="article-figure w-full overflow-x-auto my-6">
                 <Image
                   src={section.image.src}
                   alt={section.image.alt}

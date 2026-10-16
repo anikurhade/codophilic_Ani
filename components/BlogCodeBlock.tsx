@@ -16,7 +16,7 @@ export default function BlogCodeBlock({ title, language, source }: { title: stri
   };
 
   return (
-    <figure className="article-code w-full overflow-x-auto my-8">
+    <figure className="article-code w-full overflow-x-auto my-6">
       <figcaption>
         <span>{title} · {language}</span>
         <button type="button" onClick={copySource} aria-label={`Copy ${title}`}>
