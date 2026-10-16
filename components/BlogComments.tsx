@@ -70,12 +70,11 @@ export default function BlogComments({ slug }: { slug: string }) {
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error ?? "Your comment could not be submitted.");
-      if (!isComment(payload.comment)) throw new Error("Comments service returned an invalid response.");
-      setComments((current) => [...current, payload.comment]);
+      if (payload.submitted !== true) throw new Error("Comments service returned an invalid response.");
       setBody("");
       setName("");
       setLinkedinUrl("");
-      setNotice("Your comment has been posted.");
+      setNotice("Your comment is awaiting moderation and will appear after approval.");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Your comment could not be submitted.");
     } finally {

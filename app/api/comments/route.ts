@@ -1,3 +1,4 @@
+import { createHmac } from "node:crypto";
 import { NextResponse } from "next/server";
 
 const commentFields = "id,author_name,linkedin_url,body,created_at";
@@ -5,9 +6,40 @@ const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function getSupabaseConfig() {
   const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_ANON_KEY;
-  if (!url || !key) return null;
-  return { url: url.replace(/\/+$/, ""), key };
+  const anonKey = process.env.SUPABASE_ANON_KEY;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const rateLimitSecret = process.env.COMMENTS_RATE_LIMIT_SECRET;
+  if (!url || !anonKey || !serviceRoleKey || !rateLimitSecret || rateLimitSecret.length < 32) return null;
+  return { url: url.replace(/\/+$/, ""), anonKey, serviceRoleKey, rateLimitSecret };
+}
+
+function getRateLimitFingerprint(request: Request, secret: string) {
+  const forwardedFor = request.headers.get("x-vercel-forwarded-for")
+    ?? request.headers.get("x-forwarded-for");
+  const clientAddress = request.headers.get("x-real-ip")
+    ?? forwardedFor?.split(",")[0]?.trim();
+  if (!clientAddress) return null;
+  return createHmac("sha256", secret).update(clientAddress).digest("hex");
+}
+
+async function consumeRateLimit(url: string, key: string, fingerprint: string) {
+  const response = await fetch(`${url}/rest/v1/rpc/consume_blog_comment_rate_limit`, {
+    method: "POST",
+    headers: {
+      apikey: key,
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ p_fingerprint: fingerprint }),
+    cache: "no-store",
+  });
+  if (!response.ok) {
+    console.error("Supabase comment rate limit check failed", response.status);
+    throw new Error("Comment rate limit could not be checked.");
+  }
+  const allowed: unknown = await response.json();
+  if (typeof allowed !== "boolean") throw new Error("Comment rate limit returned an invalid response.");
+  return allowed;
 }
 
 function validLinkedInProfile(value: unknown): value is string {
@@ -32,18 +64,20 @@ export async function GET(request: Request) {
 
   const config = getSupabaseConfig();
   if (!config) {
-    return NextResponse.json({ error: "Comments are not configured yet." }, { status: 503 });
+    return NextResponse.json({ error: "Comments are not fully configured yet." }, { status: 503 });
   }
 
   const query = new URLSearchParams({
     select: commentFields,
     article_slug: `eq.${slug}`,
+    is_approved: "eq.true",
     order: "created_at.asc",
+    limit: "100",
   });
 
   try {
     const response = await fetch(`${config.url}/rest/v1/blog_comments?${query}`, {
-      headers: { apikey: config.key, Authorization: `Bearer ${config.key}` },
+      headers: { apikey: config.anonKey, Authorization: `Bearer ${config.anonKey}` },
       cache: "no-store",
     });
     if (!response.ok) {
@@ -91,17 +125,30 @@ export async function POST(request: Request) {
 
   const config = getSupabaseConfig();
   if (!config) {
-    return NextResponse.json({ error: "Comments are not configured yet." }, { status: 503 });
+    return NextResponse.json({ error: "Comments are not fully configured yet." }, { status: 503 });
+  }
+  const fingerprint = getRateLimitFingerprint(request, config.rateLimitSecret);
+  if (!fingerprint) {
+    return NextResponse.json({ error: "Comment submission requires a trusted client IP." }, { status: 503 });
   }
 
   try {
-    const response = await fetch(`${config.url}/rest/v1/blog_comments?select=${commentFields}`, {
+    if (!await consumeRateLimit(config.url, config.serviceRoleKey, fingerprint)) {
+      return NextResponse.json({ error: "Too many comments. Please try again in 15 minutes." }, { status: 429 });
+    }
+  } catch (error) {
+    console.error("Comment rate limit request failed", error);
+    return NextResponse.json({ error: "Comment submission is temporarily unavailable." }, { status: 503 });
+  }
+
+  try {
+    const response = await fetch(`${config.url}/rest/v1/blog_comments`, {
       method: "POST",
       headers: {
-        apikey: config.key,
-        Authorization: `Bearer ${config.key}`,
+        apikey: config.serviceRoleKey,
+        Authorization: `Bearer ${config.serviceRoleKey}`,
         "Content-Type": "application/json",
-        Prefer: "return=representation",
+        Prefer: "return=minimal",
       },
       body: JSON.stringify({
         article_slug: slug,
@@ -113,17 +160,11 @@ export async function POST(request: Request) {
     });
     if (!response.ok) {
       console.error("Supabase comment insert failed", response.status);
-      return NextResponse.json({ error: "Your comment could not be posted." }, { status: 502 });
+      return NextResponse.json({ error: "Your comment could not be submitted." }, { status: 502 });
     }
-    const inserted: unknown = await response.json();
-    if (!Array.isArray(inserted) || inserted.length !== 1) {
-      console.error("Supabase comment insert returned an invalid response.");
-      return NextResponse.json({ error: "Your comment could not be posted." }, { status: 502 });
-    }
-    const [comment] = inserted;
-    return NextResponse.json({ comment }, { status: 201 });
+    return NextResponse.json({ submitted: true }, { status: 202 });
   } catch (error) {
     console.error("Supabase comment insert request failed", error);
-    return NextResponse.json({ error: "Your comment could not be posted." }, { status: 502 });
+    return NextResponse.json({ error: "Your comment could not be submitted." }, { status: 502 });
   }
 }

@@ -105,7 +105,7 @@ Then run the app locally and open `http://127.0.0.1:3000/api/spotify/login`. The
 
 ### Blog comments
 
-Comments use the Supabase REST API and the public anon key; the service-role key is never used by the app. Create a Supabase project, run `supabase/migrations/20261016000000_create_blog_comments.sql`, and set `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `.env.local` and the deployment environment. The API validates comment length, name, and LinkedIn profile URLs; RLS permits public reads and inserts only. Public anonymous inserts can still attract spam, so add a CAPTCHA or moderation workflow before using this on a high-traffic site.
+Comments use the Supabase REST API. Create a Supabase project, run both SQL migrations in `supabase/migrations/`, and set `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and a random `COMMENTS_RATE_LIMIT_SECRET` of at least 32 characters in `.env.local` and deployment settings. Keep the service-role key and rate-limit secret server-only. The API enforces five submissions per client IP per 15 minutes, limits reads to 100 approved comments, and places all new comments in moderation. The service-role key is used only server-side to submit comments; public roles can read approved comments but cannot insert or inspect pending comments. Approve a comment from the Supabase SQL editor with `update public.blog_comments set is_approved = true where id = '<comment-uuid>';`.
 
 The AttentionLens repository link is included in the project card, but the repository is private; publish it or replace the link with a public demo before launch.
 
